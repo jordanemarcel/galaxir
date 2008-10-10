@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <projectDescription>
 	<name>GalaxIR</name>
-	<comment></comment>
+	<comment>@key 32303037303632392047616C617849522F6A6F7264616E65 </comment>
 	<projects>
 	</projects>
 	<buildSpec>
@@ -10,8 +10,14 @@
 			<arguments>
 			</arguments>
 		</buildCommand>
+		<buildCommand>
+			<name>com.omondo.uml.std.Builder</name>
+			<arguments>
+			</arguments>
+		</buildCommand>
 	</buildSpec>
 	<natures>
 		<nature>org.eclipse.jdt.core.javanature</nature>
+		<nature>com.omondo.uml.std.Nature</nature>
 	</natures>
 </projectDescription>
