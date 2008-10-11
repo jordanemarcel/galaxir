@@ -5,9 +5,9 @@ import fr.umlv.remix.TimerRunnable;
 import fr.umlv.remix.TimerTask;
 
 public class MyTimerRunnable implements TimerRunnable {
-	final Arena<TestItem> arg0;
+	final Arena<Drawable> arg0;
 	
-	public MyTimerRunnable(Arena<TestItem> arg0) {
+	public MyTimerRunnable(Arena<Drawable> arg0) {
 		this.arg0 = arg0;
 	}
 	
