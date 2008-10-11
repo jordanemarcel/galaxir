@@ -37,7 +37,6 @@ public class MyApplicationRunnable implements ApplicationRunnable<Drawable> {
 			 public void mouseClicked(ArrayList<Drawable> arg0,
 					 KeyPress arg1) {
 				 System.out.println("Select " + arg0);
-				 MovingShip.destination = arg0.get(0).getLocation();
 				 /*for (Drawable testItem : arg0) {
             testItem.swap();
           }*/
@@ -81,6 +80,9 @@ public class MyApplicationRunnable implements ApplicationRunnable<Drawable> {
 			 public void mouseOver(ArrayList<Drawable> itemsOver, KeyPress key) {
 				 if(!itemsOver.isEmpty())
 					 System.out.println("Over :"+itemsOver);
+				 for(Drawable d: itemsOver) {
+					 d.setOver(true);
+				 }
 			 }
 		 };
 
@@ -143,6 +145,6 @@ public class MyApplicationRunnable implements ApplicationRunnable<Drawable> {
 		  * We ask the Application to call the following run function every
 		  * seconds. This method just refresh the component.
 		  */
-		 Application.timer(40, new MyTimerRunnable(arg0));
+		 Application.timer(40, new MyTimerRunnable(arg0, arg1));
 	 }
 }

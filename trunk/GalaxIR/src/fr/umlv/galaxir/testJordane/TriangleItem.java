@@ -67,4 +67,8 @@ public class TriangleItem implements Drawable {
     public boolean contains(Point2D location) {
         return TestManager.circleDistance(location, getLocation()) <= getWidth()*getWidth()/4;
       }
+    
+    public void setOver(boolean b) {
+    	
+    }
 }
