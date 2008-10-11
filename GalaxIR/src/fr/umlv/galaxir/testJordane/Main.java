@@ -1,22 +1,26 @@
 package fr.umlv.galaxir.testJordane;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Random;
 
-import fr.umlv.remix.*;
+import fr.umlv.remix.Application;
 
 public class Main {
 
-  public static void main(String[] args) {
+  public static void main(String[] args) throws IOException {
     Random random = new Random();
-    ArrayList<TestItem> testItemList = new ArrayList<TestItem>();
+    ArrayList<Drawable> testItemList = new ArrayList<Drawable>();
     /*
      * Randomly position 25 TestItems in the Arena zone (defined afterwards)
      */
-    for (int i = 0; i < 25; i++) {
-      testItemList.add(new TestItem(random.nextInt(300), random.nextInt(200),
-          10));
+    for (int i = 0; i < 3; i++) {
+      testItemList.add(new TestItem(random.nextInt(640), random.nextInt(480),
+          100));
     }
+    testItemList.add(new TriangleItem(random.nextInt(640), random.nextInt(480),
+            30));
+	
 
     TestManager manager = new TestManager();
 
@@ -25,5 +29,8 @@ public class Main {
      * an item manager and an ApplicationRunnable
      */
     Application.run(testItemList, manager, new MyApplicationRunnable());
+    Runnable runnable = new MovingShip((TriangleItem)testItemList.get(3));
+    //new Thread(runnable).start();
+    
   }
 }
