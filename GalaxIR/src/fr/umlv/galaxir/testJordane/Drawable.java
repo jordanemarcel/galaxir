@@ -18,5 +18,7 @@ public interface Drawable {
 	public void draw(Graphics2D g);
 	
 	public boolean contains(Point2D location);
+	
+	public void setOver(boolean b);
 
 }
