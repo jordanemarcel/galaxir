@@ -27,10 +27,10 @@ public class RemixTest {
 		Player p = new Player("Clement",Color.red,Color.pink);
 		
 		//testItemList.add(new Xtwin(new Point(10,10),new Point(600,400)));
-		for (int i = 1; i <= 5; i++) {
+		for (int i = 1; i <= 5000; i++) {
 			testItemList.add(new Xtwin(new Point(random.nextInt(640),random.nextInt(480))
 			,new Point(random.nextInt(640),random.nextInt(480)),p));
-			testItemList.add(new Planet(100,50,i*20,new Point(random.nextInt(640),random.nextInt(480)),null ));
+			//testItemList.add(new Planet(100,50,i*20,new Point(random.nextInt(640),random.nextInt(480)),null ));
 		}
 		GalaxyItemManager manager = new GalaxyItemManager();
 		/*
