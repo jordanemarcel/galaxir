@@ -8,15 +8,15 @@ import fr.umlv.remix.TimerTask;
 
 public class MyTimerRunnable implements TimerRunnable {
 	final Arena<Drawable> arg0;
-	private final ShipMover ms;
+	private final ShipMover sm;
 	
 	public MyTimerRunnable(Arena<Drawable> arg0, Collection<? extends Drawable> arg1) {
 		this.arg0 = arg0;
-		this.ms = new ShipMover(arg1.iterator());
+		this.sm = new ShipMover(arg1.iterator());
 	}
 	
 	public void run(TimerTask timerTask) {
-		ms.run();
+		sm.run();
         arg0.refresh();
     }
 }
