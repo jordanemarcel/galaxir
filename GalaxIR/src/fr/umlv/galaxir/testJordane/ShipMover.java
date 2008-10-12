@@ -15,7 +15,6 @@ public class ShipMover implements Runnable {
 				this.item = (TriangleItem)d;
 		}
 	}
-
 	@Override
 	public void run() {
 		Point2D center = item.getLocation();

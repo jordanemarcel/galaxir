@@ -1,7 +1,7 @@
 package fr.umlv.galaxir.testClement;
 import java.awt.Color;
 
-public abstract class Player{
+public class Player{
 	private static int serialId;
 	private final int playerId = serialId++;
 	private final Color mainColor;
