@@ -11,7 +11,6 @@ public abstract class Ship implements GalaxyItem{
 	private final int size;
 	private final Player owner;
 	private Point2D location;
-	private final Point2D source;
 	private final Point2D destination;
 	private final Color[] colors;
 	private int currentColor;
@@ -30,12 +29,7 @@ public abstract class Ship implements GalaxyItem{
 		colors = new Color[2];
 		colors[0] =owner.getMainColor();
 		colors[1] = owner.getAuxColor();
-		this.source = new Point((int)location.getX(), (int)location.getY());
 		//trajectory = new LinkedList<Point2D>();
-	}
-	
-	public Point2D getSource() {
-		return source;
 	}
 	
 	public Point2D getDestination() {
@@ -104,15 +98,15 @@ public abstract class Ship implements GalaxyItem{
 			location=destination;
 		if (location.equals(destination))
 			return;
-		System.out.println("-------------------");
+		//System.out.println("-------------------");
 		double distance = location.distance(destination);
-		System.out.println("Distance="+distance);
+		//System.out.println("Distance="+distance);
 		double distanceX = destination.getX() - location.getX();
 		double distanceY = destination.getY() - location.getY();
-		System.out.println("DisX="+distanceX+" DisY="+distanceY);
+		//System.out.println("DisX="+distanceX+" DisY="+distanceY);
 		double moveX = distanceX*speed/distance;
 		double moveY = distanceY*speed/distance;
-		System.out.println("MovX="+moveX+" MovY="+moveY);
+		//System.out.println("MovX="+moveX+" MovY="+moveY);
 		bufferX += moveX;
 		bufferY += moveY;
 		int intMoveX = (int)Math.floor(bufferX);

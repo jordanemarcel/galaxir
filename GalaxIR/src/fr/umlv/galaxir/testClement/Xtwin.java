@@ -26,7 +26,6 @@ public class Xtwin extends Ship{
         g.drawLine(x, y, x+w/2, y+w);
         g.drawLine(x-w/2, y+w, x+w/2, y+w);
         g.setColor(Color.black);
-        g.drawLine((int)getSource().getX(), (int)getSource().getY(), (int)getDestination().getX(), (int)getDestination().getY());
 	}
 	@Override
 	public Rectangle2D getRectangleArea() {
