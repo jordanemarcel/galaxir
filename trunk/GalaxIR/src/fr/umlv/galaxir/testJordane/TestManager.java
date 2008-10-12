@@ -28,7 +28,7 @@ class TestManager implements ItemManager<Drawable> {
         double dx = p1.getX() - p2.getX();
         double dy = p1.getY() - p2.getY();
         return dx * dx + dy * dy;
-      }
+    }
     
     public static double circleDistance(Point2D p1, Point2D p2) {
         double dx = p1.getX() - p2.getX();

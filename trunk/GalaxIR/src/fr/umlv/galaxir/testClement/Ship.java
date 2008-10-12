@@ -11,9 +11,12 @@ public abstract class Ship implements GalaxyItem{
 	private final int size;
 	private final Player owner;
 	private Point2D location;
+	private final Point2D source;
 	private final Point2D destination;
 	private final Color[] colors;
 	private int currentColor;
+	private double bufferX = 0;
+	private double bufferY = 0;
 	//private final LinkedList<Point2D> trajectory;
 	public Ship(int attack, int speed, int cost,int size, 
 			Point2D location, Point2D destination,Player owner) {
@@ -27,8 +30,18 @@ public abstract class Ship implements GalaxyItem{
 		colors = new Color[2];
 		colors[0] =owner.getMainColor();
 		colors[1] = owner.getAuxColor();
+		this.source = new Point((int)location.getX(), (int)location.getY());
 		//trajectory = new LinkedList<Point2D>();
 	}
+	
+	public Point2D getSource() {
+		return source;
+	}
+	
+	public Point2D getDestination() {
+		return destination;
+	}
+	
 	public int getNextLocation(){
 		return 0;
 	}
@@ -58,6 +71,7 @@ public abstract class Ship implements GalaxyItem{
 		//this.destination = destination;
 	//}
 	public void move(){
+		/*
 		if (location.equals(destination))
 			return;
 		double adj = location.getX() - destination.getX();
@@ -85,6 +99,29 @@ public abstract class Ship implements GalaxyItem{
 		System.out.println(" new=[x="+x+"y="+y+"]");
 		if(location.distance(destination) < speed)
 			location=destination;
+		*/
+		if(location.distance(destination) < speed)
+			location=destination;
+		if (location.equals(destination))
+			return;
+		System.out.println("-------------------");
+		double distance = location.distance(destination);
+		System.out.println("Distance="+distance);
+		double distanceX = destination.getX() - location.getX();
+		double distanceY = destination.getY() - location.getY();
+		System.out.println("DisX="+distanceX+" DisY="+distanceY);
+		double moveX = distanceX*speed/distance;
+		double moveY = distanceY*speed/distance;
+		System.out.println("MovX="+moveX+" MovY="+moveY);
+		bufferX += moveX;
+		bufferY += moveY;
+		int intMoveX = (int)Math.floor(bufferX);
+		int intMoveY = (int)Math.floor(bufferY);
+		bufferX -= (double)intMoveX;
+		bufferY -= (double)intMoveY;
+		double nextX = location.getX() + intMoveX;
+		double nextY = location.getY() + intMoveY;
+		setLocation(new Point((int)nextX, (int)nextY));
 	}
 
 }
