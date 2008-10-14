@@ -1,4 +1,4 @@
-package fr.umlv.galaxir.testJordane;
+package fr.umlv.galaxir.old.testJordane;
 
 import java.io.IOException;
 import java.util.ArrayList;
