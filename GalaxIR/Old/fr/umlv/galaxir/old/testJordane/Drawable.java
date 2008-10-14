@@ -1,4 +1,4 @@
-package fr.umlv.galaxir.testJordane;
+package fr.umlv.galaxir.old.testJordane;
 
 import java.awt.Color;
 import java.awt.Graphics2D;
