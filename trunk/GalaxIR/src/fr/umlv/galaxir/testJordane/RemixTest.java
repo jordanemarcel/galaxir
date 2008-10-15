@@ -29,11 +29,13 @@ public class RemixTest {
 		
 		//testItemList.add(new Xtwin(new Point(10,10),new Point(600,400)));
 		testItemList.add(new Planet(100,50,300,new Point(320,240),null ));
-		for (int i = 1; i <= 50; i++) {
+		for (int i = 1; i <= 1000; i++) {
 			testItemList.add(new Xtwin(new Point.Double(random.nextInt(640),random.nextInt(480))
 			,new Point.Double(random.nextInt(640),random.nextInt(480)),p));
 			//testItemList.add(new Planet(100,50,i*20,new Point(random.nextInt(640),random.nextInt(480)),null ));
 		}
+		testItemList.add(new DeathStar(new Point.Double(random.nextInt(640),random.nextInt(480))
+		,new Point.Double(random.nextInt(640),random.nextInt(480)),p));
 		GalaxyItemManager manager = new GalaxyItemManager();
 		/*
 		 * Call the run method of Application providing an initial item Collection,
