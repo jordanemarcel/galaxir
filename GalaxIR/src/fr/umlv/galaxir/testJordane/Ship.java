@@ -21,6 +21,7 @@ public abstract class Ship implements GalaxyItem{
 	private int currentColor;
 	private int goAroundWay = 0;
 	private double angle;
+	private double rotation = 0;
 	
 	public static ArrayList<GalaxyItem> l;
 	
@@ -46,6 +47,10 @@ public abstract class Ship implements GalaxyItem{
 	
 	public Point2D getDestination() {
 		return destination;
+	}
+	
+	public double getRotation() {
+		return this.rotation;
 	}
 	
 	public int getNextLocation(){
@@ -116,6 +121,8 @@ public abstract class Ship implements GalaxyItem{
 		double nextX = location.getX() + moveX;
 		double nextY = location.getY() + moveY;
 		//System.out.println("New: "+nextX+","+nextY);
+		double centerX = location.getX();
+		double centerY = location.getY();
 		double rotateX = location.getX()*100;
 		double rotateY = location.getY()*100;
 		this.setLocation(new Point.Double(nextX, nextY));
@@ -172,7 +179,48 @@ public abstract class Ship implements GalaxyItem{
 		//System.out.println("----------");
 		//l.add(new Cordon(new Point.Double(location.getX(), location.getY()), new Point.Double(nextX, nextY)));
 		setLocation(new Point.Double(nextX, nextY));
-		
+		Point2D.Double top = Ship.findUpperPoint(new Point2D.Double(centerX, centerY));
+		this.rotation = computeAngle(new Point2D.Double(centerX, centerY), top, new Point.Double(nextX, nextY));
+		if(nextX<centerX)
+			this.rotation = -this.rotation;
+	}
+	
+	public static Point2D.Double findUpperPoint(Point2D.Double p) {
+		double x = p.getX();
+		double y = 0;
+		return new Point2D.Double(x, y);
+	}
+
+	public static double length (double[] v)
+	{
+		return Math.sqrt(v[0]*v[0] + v[1]*v[1]);
+	}
+	
+	public static double scalarProduct(double[] v0, double[] v1) {
+		return v0[0] * v1[0] + v0[1] * v1[1];
+	}
+	
+	public static double[] createVector(Point2D.Double p1, Point2D.Double p2) {
+		double v[] = {(p2.getX() - p1.getX()), (p2.getY() - p1.getY())};
+		return v;
+	}
+
+	public static double computeAngle (Point2D.Double p1, Point2D.Double p2, Point2D.Double p3) {
+		double[] v0 = Ship.createVector(p1, p2);
+		double[] v1 = Ship.createVector(p1, p3);
+
+		double dotProduct = Ship.scalarProduct(v0, v1);
+
+		double length1 = Ship.length(v0);
+		double length2 = Ship.length(v1);
+
+		double denominator = length1 * length2;
+
+		double product = denominator != 0.0 ? dotProduct / denominator : 0.0;
+
+		double angle = Math.acos(product);
+
+		return angle;
 	}
 
 }

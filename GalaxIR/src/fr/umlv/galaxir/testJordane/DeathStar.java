@@ -1,18 +1,16 @@
 package fr.umlv.galaxir.testJordane;
 
-
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
-import java.util.Random;
 
-public class Xtwin extends Ship{
+public class DeathStar extends Ship {
 
-	public Xtwin( Point2D.Double location,Point2D.Double destination,Player owner) {
-		super(1, 1, 1, 5, location, destination, owner);
+	public DeathStar( Point2D.Double location,Point2D.Double destination,Player owner) {
+		super(1, 1, 1, 50, location, destination, owner);
 	}
 
 	@Override
@@ -22,7 +20,7 @@ public class Xtwin extends Ship{
 	}
 	
 	public int getRadius() {
-		return getSize();
+		return getSize()/2;
 	}
 	
 	public boolean intersects(Planet p) {
@@ -36,11 +34,17 @@ public class Xtwin extends Ship{
 	public void draw(Graphics2D g) {
 		Point2D pos = getLocation();
         int x = (int) pos.getX(), y = (int) pos.getY(), w = super.getSize();
-        g.setColor(Color.blue);
+        g.setColor(Color.gray);
+        g.fillOval(x-w/2, y-w/2, w, w);
+        g.setColor(Color.darkGray);
+        g.fillOval(x+w/8, y-w/3, w/4, w/4);
+        g.setColor(Color.black);
+        g.drawLine(x-w/2+1, y, x+w/2-1, y);
+       // g.fillOval(x+w/2+w/4, y+w/2-w/4, w/4, w/4);
         /* g.drawLine(x, y, x-w/2, y+w);
         g.drawLine(x, y, x+w/2, y+w);
         g.drawLine(x-w/2, y+w, x+w/2, y+w);*/
-        double rotation = this.getRotation();
+       /* double rotation = this.getRotation();
         int[] tx = new int[3];
         int[] ty = new int[3];
         tx[0] = x;
@@ -57,7 +61,7 @@ public class Xtwin extends Ship{
         	ty[i] = (int)np.getY();
         }
         g.fillPolygon(tx, ty, 3);
-        g.setColor(Color.black);
+        g.setColor(Color.black);*/
         //g.drawLine(x, y, (int)getDestination().getX(), (int)getDestination().getY());
 	}
 	@Override
