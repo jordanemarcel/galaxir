@@ -12,7 +12,7 @@ import java.util.Random;
 public class Xtwin extends Ship{
 
 	public Xtwin( Point2D.Double location,Point2D.Double destination,Player owner) {
-		super(1, 1, 1, 5, location, destination, owner);
+		super(1, 2, 1, 5, location, destination, owner);
 	}
 
 	@Override
@@ -58,7 +58,7 @@ public class Xtwin extends Ship{
         }
         g.fillPolygon(tx, ty, 3);
         g.setColor(Color.black);
-        //g.drawLine(x, y, (int)getDestination().getX(), (int)getDestination().getY());
+        g.drawLine(x, y, (int)getDestination().getX(), (int)getDestination().getY());
 	}
 	@Override
 	public Rectangle2D getRectangleArea() {

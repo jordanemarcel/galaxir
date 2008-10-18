@@ -49,7 +49,7 @@ public class GameCore implements ApplicationRunnable<GalaxyItem> {
 		 * We ask the Application to call the following run function every
 		 * seconds. This method just refresh the component.
 		 */
-		Application.timer(20, new RefreshTimer(arena));
-		Application.timer(20, new ShipMoverTimer(itemList));
+		Application.timer(10, new RefreshTimer(arena));
+		Application.timer(40, new ShipMoverTimer(itemList));
 	}
 }
