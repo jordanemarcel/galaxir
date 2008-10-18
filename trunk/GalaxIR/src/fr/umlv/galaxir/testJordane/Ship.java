@@ -22,6 +22,7 @@ public abstract class Ship implements GalaxyItem{
 	private double angleWay = 0;
 	private double angleWayTime = 0;
 	private double rotation = 0;
+	private GalaxyItem previous = null;
 	
 	public static ArrayList<GalaxyItem> l;
 	
@@ -142,6 +143,7 @@ public abstract class Ship implements GalaxyItem{
 					collision = true;
 					farAngle += 10;
 					
+					
 					if(angleWayTime==0) {
 						//System.out.println(farAngle);
 						if(angle<0)
@@ -150,7 +152,7 @@ public abstract class Ship implements GalaxyItem{
 							angle = -farAngle;
 					} else if(angleWayTime>1) {
 						angle = 10 * angleWay;
-					} else if(angleWayTime==1) {
+					} else if(angleWayTime==1 && previous!=p) {
 						Random r = new Random();
 						boolean randomDirection = r.nextBoolean();
 						if(randomDirection)
@@ -159,7 +161,14 @@ public abstract class Ship implements GalaxyItem{
 							angleWay = 1;
 						angle = 10 * angleWay;
 						angleWayTime = 3;
+					} else {
+						if(angle<0)
+							angle = farAngle;
+						else
+							angle = -farAngle;
 					}
+					
+					previous = p;
 					
 					if(farAngle>=380) {
 						collision = false;
