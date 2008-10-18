@@ -16,6 +16,7 @@ public class MouseManager implements fr.umlv.remix.MouseHandler<GalaxyItem> {
 		for (GalaxyItem testItem : arg0) {
 			testItem.selected();
 		}
+		SoundEffect.playExplosion();
 	}        
 
 	/*

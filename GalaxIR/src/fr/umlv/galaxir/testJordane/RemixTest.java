@@ -20,21 +20,6 @@ import fr.umlv.remix.Application;
 public class RemixTest {
 
 	public static void main(String[] args) {
-		/*
-		File f = new File("/home/jordane/Music/Megaman_2/mm2w1rm.mid");
-		try {
-			AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(f);
-			AudioFormat format = audioInputStream.getFormat();      
-			DataLine.Info info = new DataLine.Info(Clip.class, format);      
-			Clip clip = (Clip) AudioSystem.getLine(info);         
-			clip.open(audioInputStream);      
-			clip.start();
-		} catch ( Exception e ) {
-			e.printStackTrace();
-		}*/
-
-
-		
 		
 		Random random = new Random();
 		ArrayList<GalaxyItem> testItemList = new ArrayList<GalaxyItem>();
@@ -53,7 +38,7 @@ public class RemixTest {
 		//testItemList.add(new Xtwin(new Point(10,10),new Point(600,400)));
 		testItemList.add(new Planet(100,50,300,new Point(320,240),null ));
 		testItemList.add(new Planet(100,50,150,new Point(500,240),null ));
-		for (int i = 1; i <= 50; i++) {
+		for (int i = 1; i <= 5; i++) {
 			testItemList.add(new Xtwin(new Point.Double(random.nextInt(640),random.nextInt(480))
 			,new Point.Double(random.nextInt(640),random.nextInt(480)),p));
 			//testItemList.add(new Planet(100,50,i+10,new Point(random.nextInt(640),random.nextInt(480)),null ));
