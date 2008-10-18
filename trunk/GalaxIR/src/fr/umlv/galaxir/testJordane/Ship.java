@@ -19,8 +19,8 @@ public abstract class Ship implements GalaxyItem{
 	private Point2D.Double destination;
 	private final Color[] colors;
 	private int currentColor;
-	private int goAroundWay = 0;
-	private double angle;
+	private double angleWay = 0;
+	private double angleWayTime = 0;
 	private double rotation = 0;
 	
 	public static ArrayList<GalaxyItem> l;
@@ -35,9 +35,9 @@ public abstract class Ship implements GalaxyItem{
 		this.size = size;
 		this.destination = destination;
 		Random r = new Random();
-		while(this.destination.distance(320, 240)<150) {
+		/*while(this.destination.distance(320, 240)<150) {
 			this.destination = new Point.Double(r.nextInt(640), r.nextInt(320));
-		}
+		}*/
 		this.owner = owner;
 		colors = new Color[2];
 		colors[0] =owner.getMainColor();
@@ -135,16 +135,32 @@ public abstract class Ship implements GalaxyItem{
 				//System.out.println("One"+p);
 				//while(p.contains(new Point((int)nextX, (int)nextY))) {
 				while(this.intersects(p)) {
+					//System.out.println(bug++);
 					//System.out.println("Old: "+location.getX()+","+location.getY());
 					//System.out.println("New: "+nextX+","+nextY);
 					//System.out.println("Collision!");
 					collision = true;
 					farAngle += 10;
-					//System.out.println(farAngle);
-					if(angle<0)
-						angle = farAngle;
-					else
-						angle = -farAngle;
+					
+					if(angleWayTime==0) {
+						//System.out.println(farAngle);
+						if(angle<0)
+							angle = farAngle;
+						else
+							angle = -farAngle;
+					} else if(angleWayTime>1) {
+						angle = 10 * angleWay;
+					} else if(angleWayTime==1) {
+						Random r = new Random();
+						boolean randomDirection = r.nextBoolean();
+						if(randomDirection)
+							angleWay = -1;
+						else
+							angleWay = 1;
+						angle = 10 * angleWay;
+						angleWayTime = 3;
+					}
+					
 					if(farAngle>=380) {
 						collision = false;
 						nextX = 0;
@@ -166,15 +182,32 @@ public abstract class Ship implements GalaxyItem{
 					nextY = np2D.getY()/100;
 					//System.out.println(nextX+","+nextY);
 					//l.add(new Cordon(new Point.Double(rotateX/100, rotateY/100), new Point.Double(nextX, nextY)));
+					//System.out.println(angle);
 					//l.add(new Cordon(new Point.Double(320, 240), new Point.Double(nextX, nextY)));
 					this.setLocation(new Point.Double(nextX, nextY));
 				}
+				if(angle<0) {
+					angleWay = -1;
+				} else if(angle>0) {
+					angleWay = 1;
+				}
+				//System.out.println("AngleWay: "+angleWay);
+				if(collision) {
+					angleWayTime = 3;
+				}
+				//System.out.println("OK");
 				//System.out.println(farAngle*goAroundWay);
 				angle = 0;
 				farAngle = 0;
 				//System.out.println("NEXT");
 			}
 		}
+		angleWayTime--;
+		if(angleWayTime<=0) {
+			angleWayTime = 0;
+			angleWay = 0;
+		}
+		//System.out.println("FINISH");
 		//System.out.println(nextX+","+nextY);
 		//System.out.println("----------");
 		//l.add(new Cordon(new Point.Double(location.getX(), location.getY()), new Point.Double(nextX, nextY)));
