@@ -11,8 +11,8 @@ import java.util.Random;
 
 public class Xtwin extends Ship{
 
-	public Xtwin( Point2D.Double location,Point2D.Double destination,Player owner) {
-		super(1, 2, 1, 5, location, destination, owner);
+	public Xtwin( Point2D.Double location,Planet destinationPlanet,Player owner) {
+		super(1, 2, 1, 5, location, destinationPlanet, owner);
 	}
 
 	@Override
@@ -23,6 +23,10 @@ public class Xtwin extends Ship{
 	
 	public int getRadius() {
 		return getSize();
+	}
+	
+	public static double getStaticSize() {
+		return 5;
 	}
 	
 	public boolean intersects(Planet p) {
@@ -65,4 +69,21 @@ public class Xtwin extends Ship{
 		// TODO Auto-generated method stub
 		return null;
 	}*/
+	
+	public void attack(Planet p) {
+		int lastShip;
+		
+		if(this.getOwner()==p.getOwner())
+			lastShip = p.getNbShip() + this.getAttack();
+		else
+			lastShip = p.getNbShip() - this.getAttack();
+		
+		if(lastShip<=0) {
+			lastShip = 0;
+			p.setOwner(this.getOwner());
+		}
+		p.setNbShip(lastShip);
+		//SoundEffect.playExplosion();
+		this.delete();
+	}
 }

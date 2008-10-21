@@ -8,8 +8,8 @@ import java.util.Random;
 
 public class DeathStar extends Ship {
 
-	public DeathStar( Point2D.Double location,Point2D.Double destination,Player owner) {
-		super(1, 3, 1, 50, location, destination, owner);
+	public DeathStar( Point2D.Double location,Planet destinationPlanet,Player owner) {
+		super(1, 3, 1, 50, location, destinationPlanet, owner);
 	}
 
 	@Override
@@ -75,4 +75,12 @@ public class DeathStar extends Ship {
 		// TODO Auto-generated method stub
 		return null;
 	}*/
+	public void attack(Planet p) {
+		int lastShip = p.getNbShip() - this.getAttack();
+		if(lastShip<=0) {
+			lastShip = 0;
+			p.setOwner(this.getOwner());
+		}
+		p.setNbShip(lastShip);
+	}
 }

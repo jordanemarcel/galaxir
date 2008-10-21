@@ -30,7 +30,7 @@ public class GameCore implements ApplicationRunnable<GalaxyItem> {
 		 * corresponding to the Arena - by calling createComponent - to a
 		 * JFrame.
 		 */
-		final JFrame frame = new JFrame("Test Arena");
+		final JFrame frame = new JFrame("~ GaLaxIR ~");
 		/*
 		 * This is our KeyHandler that will be called by the Arena in case of
 		 * key events
@@ -51,5 +51,6 @@ public class GameCore implements ApplicationRunnable<GalaxyItem> {
 		 */
 		Application.timer(10, new RefreshTimer(arena));
 		Application.timer(40, new ShipMoverTimer(itemList));
+		Application.timer(500, new ProductionTurnTimer(itemList));
 	}
 }

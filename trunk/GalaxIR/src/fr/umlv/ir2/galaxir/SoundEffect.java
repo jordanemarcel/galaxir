@@ -9,14 +9,25 @@ import javax.sound.sampled.Clip;
 import javax.sound.sampled.DataLine;
 
 public class SoundEffect {
+	static File f = null;
+	static AudioInputStream audioInputStream = null;
+	static AudioFormat format = null;
+	static DataLine.Info info = null;
+	static Clip clip = null; 
+	
 	public static void playExplosion() {
-		File f = new File("/home/jordane/Music/explo1.wav");
 		try {
-			AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(f);
-			AudioFormat format = audioInputStream.getFormat();      
-			DataLine.Info info = new DataLine.Info(Clip.class, format);      
-			Clip clip = (Clip) AudioSystem.getLine(info);         
-			clip.open(audioInputStream);      
+			if(audioInputStream==null) {
+				f = new File("/home/jordane/Music/explo01.wav");
+				audioInputStream = AudioSystem.getAudioInputStream(f);
+				format = audioInputStream.getFormat();
+				info = new DataLine.Info(Clip.class, format);
+				clip = (Clip) AudioSystem.getLine(info);
+				clip.open(audioInputStream);      
+			}       
+			else {
+				clip.setFramePosition(0);
+			}
 			clip.start();
 		} catch ( Exception e ) {
 			e.printStackTrace();
