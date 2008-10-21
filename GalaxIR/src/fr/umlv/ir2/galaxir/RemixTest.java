@@ -27,7 +27,7 @@ public class RemixTest {
 		Player.setHumanPlayer(p);
 		
 		Random random = new Random();
-		testItemList.add(new Planet(100,50,100,new Point(random.nextInt(640),random.nextInt(480)), p));
+		testItemList.add(new Planet(10000,50,100,new Point(random.nextInt(640),random.nextInt(480)), p));
 		testItemList.add(new Planet(100,50,100,new Point(random.nextInt(640),random.nextInt(480)), p));
 		testItemList.add(new Planet(100,50,100,new Point(random.nextInt(640),random.nextInt(480)), p));
 		for (int i = 1; i <= 10; i++) {

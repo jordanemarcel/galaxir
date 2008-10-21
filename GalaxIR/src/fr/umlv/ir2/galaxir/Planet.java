@@ -2,15 +2,17 @@ package fr.umlv.ir2.galaxir;
 
 
 import java.awt.Color;
-import java.awt.Dimension;
 import java.awt.Graphics2D;
 import java.awt.Point;
-import java.awt.Rectangle;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Point2D;
-import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
 import java.util.Random;
+
+import javax.swing.Timer;
+
+import fr.umlv.remix.Application;
+import fr.umlv.remix.TimerTask;
 
 
 public class Planet implements GalaxyItem{
@@ -175,22 +177,32 @@ public class Planet implements GalaxyItem{
 		return (distance<(this.getRadius()+width/2));
 	}
 	
-	public ArrayList<Ship> moveShipTowards(Planet p, int percentage) {
+	public void moveShipTowards(Planet p, int percentage, ArrayList<GalaxyItem> itemList) {
 		
 		int number = (int)Math.floor(nbShip * percentage / 100);
 		nbShip -= number;
-		ArrayList<Ship> escadron = new ArrayList<Ship>();
+		/*
+		 * Penser à calculer le timer ideal
+		 */
+		
+		Squadron squadron = new Squadron(this, p, owner);
+		
+		
+		Application.timer(200, new SquadronUnleasherTimer(itemList, squadron, number));
+		
 		/*if(number>nbShip)
 			return null;*/
-		
+		/*
 		Point2D.Double locationDouble = new Point2D.Double(this.getLocation().getX(), this.getLocation().getY());
 		Point2D.Double top = Trigo.findUpperPoint(locationDouble);
 		Point2D.Double destinationDouble = new Point2D.Double(p.getLocation().getX(), p.getLocation().getY());
 		double angle = Trigo.computeAngle(locationDouble, top, destinationDouble);
 		if(locationDouble.getX()>destinationDouble.getX())
 			angle = -angle;
+		
 		double creationX = locationDouble.getX();
 		double creationY = locationDouble.getY() - this.getRadius() - Xtwin.getStaticSize();
+		
 		Point2D.Double leftPoint = new Point2D.Double(creationX - Xtwin.getStaticSize()/2, creationY);
 		Point2D.Double rightPoint = new Point2D.Double(creationX + Xtwin.getStaticSize()/2, creationY);
 		
@@ -200,6 +212,7 @@ public class Planet implements GalaxyItem{
 		Point2D currentPoint = at.transform(calibratedPoint, null);
 		calibratedPoint = new Point((int)currentPoint.getX(), (int)currentPoint.getY());
 		angle = angleOfRotation;
+		
 		for(int i=0;i<number;i++) {
 			escadron.add(new Xtwin(new Point2D.Double(currentPoint.getX()/100, currentPoint.getY()/100), p, this.owner));
 			at = AffineTransform.getRotateInstance(angle, locationDouble.getX()*100, locationDouble.getY()*100);
@@ -211,6 +224,8 @@ public class Planet implements GalaxyItem{
 				angle += angleOfRotation;
 			}
 		}
-		return escadron; 
+		for(Ship s: escadron) {
+			itemList.add(s);
+		}*/
 	}
 }
