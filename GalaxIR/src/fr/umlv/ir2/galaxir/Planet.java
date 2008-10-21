@@ -6,6 +6,7 @@ import java.awt.Dimension;
 import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.Rectangle;
+import java.awt.geom.AffineTransform;
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
@@ -13,16 +14,21 @@ import java.util.Random;
 
 
 public class Planet implements GalaxyItem{
-	private int nbShip;
+	private double nbShip;
 	private int currentColor;
 	private Player owner;
-	private final int shipRepop;
+	private final double shipRepop;
 	private final int width;
 	private final Point2D location;
 	private final Color[] colors = { Color.blue, Color.cyan };
 	//private final Rectangle2D shape;
 	private boolean over;
 	private boolean selected;
+	
+	public void startProduction() {
+		if(owner!=null)
+			this.nbShip += shipRepop/60;
+	}
 
 	public Planet(ArrayList<GalaxyItem> testItemList) {
 		Random random = new Random();
@@ -65,6 +71,14 @@ public class Planet implements GalaxyItem{
 		over=false;
 	}
 	
+	public void setNbShip(int nb) {
+		nbShip = nb;
+	}
+	
+	public int getNbShip() {
+		return (int)Math.floor(nbShip);
+	}
+	
 	public void setOwner(Player owner) {
 		this.owner = owner;
 	}
@@ -77,10 +91,7 @@ public class Planet implements GalaxyItem{
 		return width/2;
 	}
 
-	public int getNbShip() {
-		return nbShip;
-	}
-	public int getShipRepop() {
+	public double getShipRepop() {
 		return shipRepop;
 	}
 	public int getWidth() {
@@ -129,7 +140,7 @@ public class Planet implements GalaxyItem{
 			g.setColor(Color.DARK_GRAY);
 		g.fillOval((int)location.getX()-width/2, (int)location.getY()-width/2, width, width);
 		g.setColor(Color.white);
-		String s = new String(""+nbShip);
+		String s = new String(""+this.getNbShip());
 		g.drawString(s, (int)location.getX()-5, (int)location.getY()+5);
 	}
 
@@ -137,14 +148,69 @@ public class Planet implements GalaxyItem{
 	public Rectangle2D getRectangleArea() {
 		return shape;
 	}*/
+	
+	public void selectAndAdd(Player player) {
+		if(player==this.getOwner()) {
+			selected = true;
+			player.addSelectedPlanet(this);
+		}
+	}
+	
+	public void unselectAndRemove(Player player) {
+		selected = false;
+		player.removeSelectedPlanet(this);
+	}
+	
 	@Override
 	public void selected(Player player) {
-		selected = (selected==true ? false : true);
-		player.addSelectedPlanet(this);
+		selected = true;
+	}
+	
+	public void unselected(Player player) {
+		selected = false;
 	}
 	
 	public boolean intersects(Point2D location, int width) {
 		double distance = this.getLocation().distance(location);
 		return (distance<(this.getRadius()+width/2));
+	}
+	
+	public ArrayList<Ship> moveShipTowards(Planet p, int percentage) {
+		
+		int number = (int)Math.floor(nbShip * percentage / 100);
+		nbShip -= number;
+		ArrayList<Ship> escadron = new ArrayList<Ship>();
+		/*if(number>nbShip)
+			return null;*/
+		
+		Point2D.Double locationDouble = new Point2D.Double(this.getLocation().getX(), this.getLocation().getY());
+		Point2D.Double top = Trigo.findUpperPoint(locationDouble);
+		Point2D.Double destinationDouble = new Point2D.Double(p.getLocation().getX(), p.getLocation().getY());
+		double angle = Trigo.computeAngle(locationDouble, top, destinationDouble);
+		if(locationDouble.getX()>destinationDouble.getX())
+			angle = -angle;
+		double creationX = locationDouble.getX();
+		double creationY = locationDouble.getY() - this.getRadius() - Xtwin.getStaticSize();
+		Point2D.Double leftPoint = new Point2D.Double(creationX - Xtwin.getStaticSize()/2, creationY);
+		Point2D.Double rightPoint = new Point2D.Double(creationX + Xtwin.getStaticSize()/2, creationY);
+		
+		double angleOfRotation = Trigo.computeAngle(locationDouble, leftPoint, rightPoint);
+		Point2D calibratedPoint = new Point((int)(creationX*100), (int)(creationY*100));
+		AffineTransform at = AffineTransform.getRotateInstance(angle, locationDouble.getX()*100, locationDouble.getY()*100);
+		Point2D currentPoint = at.transform(calibratedPoint, null);
+		calibratedPoint = new Point((int)currentPoint.getX(), (int)currentPoint.getY());
+		angle = angleOfRotation;
+		for(int i=0;i<number;i++) {
+			escadron.add(new Xtwin(new Point2D.Double(currentPoint.getX()/100, currentPoint.getY()/100), p, this.owner));
+			at = AffineTransform.getRotateInstance(angle, locationDouble.getX()*100, locationDouble.getY()*100);
+			currentPoint = at.transform(calibratedPoint, null);
+			if(angle>=0)
+				angle = -angle;
+			else {
+				angle = -angle;
+				angle += angleOfRotation;
+			}
+		}
+		return escadron; 
 	}
 }

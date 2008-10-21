@@ -10,10 +10,25 @@ public class MouseManager implements fr.umlv.remix.MouseHandler<GalaxyItem> {
 	@Override
 	public void mouseClicked(ArrayList<GalaxyItem> arg0,KeyPress arg1) {
 		//System.out.println("Select " + arg0);
-		for (GalaxyItem testItem : arg0) {
-			testItem.selected(Player.getHumanPlayer());
+		for(GalaxyItem testItem : arg0) {
+			if(testItem instanceof Planet) {
+				Planet p = (Planet)testItem;
+				if(arg1.equals(KeyPress.CRTL)) {
+					if(Player.getHumanPlayer().containsSelectedPlanet(p)) {
+						p.unselectAndRemove(Player.getHumanPlayer());
+					}
+					else {
+						p.selectAndAdd(Player.getHumanPlayer());
+					}
+				} else if(arg1.equals(KeyPress.SHIFT)) {
+					Player.getHumanPlayer().launchShip(p);
+				}
+				else {
+					Player.getHumanPlayer().clearSelectedPlanet();
+					p.selectAndAdd(Player.getHumanPlayer());
+				}
+			}
 		}
-		//SoundEffect.playExplosion();
 	}        
 
 	/*

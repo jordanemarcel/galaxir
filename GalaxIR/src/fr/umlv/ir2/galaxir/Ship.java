@@ -16,26 +16,25 @@ public abstract class Ship implements GalaxyItem{
 	private final int size;
 	private final Player owner;
 	private Point2D.Double location;
-	private Point2D.Double destination;
+	private Planet destinationPlanet;
 	private final Color[] colors;
 	private int currentColor;
 	private double angleWay = 0;
 	private double angleWayTime = 0;
 	private double rotation = 0;
 	private GalaxyItem previous = null;
-	
-	public static ArrayList<GalaxyItem> l;
+	private boolean toBeDeleted = false;
 	
 	//private final LinkedList<Point2D> trajectory;
 	public Ship(int attack, int speed, int cost,int size, 
-			Point2D.Double location, Point2D.Double destination,Player owner) {
+			Point2D.Double location, Planet destination,Player owner) {
 		this.attack = attack;
 		this.speed = speed;
 		this.cost = cost; 
 		this.location = location;
 		this.size = size;
-		this.destination = destination;
-		Random r = new Random();
+		this.destinationPlanet = destination;
+
 		/*while(this.destination.distance(320, 240)<150) {
 			this.destination = new Point.Double(r.nextInt(640), r.nextInt(320));
 		}*/
@@ -46,8 +45,8 @@ public abstract class Ship implements GalaxyItem{
 		//trajectory = new LinkedList<Point2D>();
 	}
 	
-	public Point2D getDestination() {
-		return destination;
+	public Planet getDestination() {
+		return destinationPlanet;
 	}
 	
 	public double getRotation() {
@@ -63,11 +62,21 @@ public abstract class Ship implements GalaxyItem{
 	public int getCost() {
 		return cost;
 	}
+	
+	public void delete() {
+		this.toBeDeleted = true;
+	}
+	public boolean toBeDeleted() {
+		return this.toBeDeleted;
+	}
 	public int getSpeed() {
 		return speed;
 	}
 	public int getSize() {
 		return size;
+	}
+	public Player getOwner() {
+		return owner;
 	}
 	public Point2D getLocation() {
 		return location;
@@ -85,6 +94,7 @@ public abstract class Ship implements GalaxyItem{
 		//this.destination = destination;
 	//}
 	public void move(LinkedList<Planet> planetList){
+		Point2D.Double destination = new Point2D.Double(destinationPlanet.getLocation().getX(),destinationPlanet.getLocation().getY());
 		if(location.distance(destination) < speed)
 			location=destination;
 		if (location.equals(destination))
@@ -136,6 +146,10 @@ public abstract class Ship implements GalaxyItem{
 				//System.out.println("One"+p);
 				//while(p.contains(new Point((int)nextX, (int)nextY))) {
 				while(this.intersects(p)) {
+					if(p==destinationPlanet) {
+						this.attack(p);
+						return;
+					}
 					//System.out.println(bug++);
 					//System.out.println("Old: "+location.getX()+","+location.getY());
 					//System.out.println("New: "+nextX+","+nextY);
@@ -176,8 +190,8 @@ public abstract class Ship implements GalaxyItem{
 						nextY = 0;
 						break;
 					}
-					AffineTransform at = AffineTransform.getRotateInstance(Math.toRadians(angle), rotateX, rotateY);
 					op2D = new Point2D.Double(nextX*100, nextY*100);
+					AffineTransform at = AffineTransform.getRotateInstance(Math.toRadians(angle), rotateX, rotateY);
 					np2D = at.transform(op2D, null);
 					//System.out.println("Centre x="+rotateX+", centre y="+rotateY);
 					//System.out.println("X="+nextX+", Y="+nextY);
@@ -221,48 +235,14 @@ public abstract class Ship implements GalaxyItem{
 		//System.out.println("----------");
 		//l.add(new Cordon(new Point.Double(location.getX(), location.getY()), new Point.Double(nextX, nextY)));
 		setLocation(new Point.Double(nextX, nextY));
-		Point2D.Double top = Ship.findUpperPoint(new Point2D.Double(centerX, centerY));
-		this.rotation = computeAngle(new Point2D.Double(centerX, centerY), top, new Point.Double(nextX, nextY));
+		Point2D.Double top = Trigo.findUpperPoint(new Point2D.Double(centerX, centerY));
+		this.rotation = Trigo.computeAngle(new Point2D.Double(centerX, centerY), top, new Point.Double(nextX, nextY));
 		if(nextX<centerX)
 			this.rotation = -this.rotation;
 	}
 	
-	public static Point2D.Double findUpperPoint(Point2D.Double p) {
-		double x = p.getX();
-		double y = 0;
-		return new Point2D.Double(x, y);
-	}
-
-	public static double length (double[] v)
-	{
-		return Math.sqrt(v[0]*v[0] + v[1]*v[1]);
-	}
 	
-	public static double scalarProduct(double[] v0, double[] v1) {
-		return v0[0] * v1[0] + v0[1] * v1[1];
-	}
 	
-	public static double[] createVector(Point2D.Double p1, Point2D.Double p2) {
-		double v[] = {(p2.getX() - p1.getX()), (p2.getY() - p1.getY())};
-		return v;
-	}
-
-	public static double computeAngle (Point2D.Double p1, Point2D.Double p2, Point2D.Double p3) {
-		double[] v0 = Ship.createVector(p1, p2);
-		double[] v1 = Ship.createVector(p1, p3);
-
-		double dotProduct = Ship.scalarProduct(v0, v1);
-
-		double length1 = Ship.length(v0);
-		double length2 = Ship.length(v1);
-
-		double denominator = length1 * length2;
-
-		double product = denominator != 0.0 ? dotProduct / denominator : 0.0;
-
-		double angle = Math.acos(product);
-
-		return angle;
-	}
+	public abstract void attack(Planet p);
 
 }
