@@ -49,7 +49,6 @@ public class Player{
 	
 	public void launchShip(Planet p) {
 		if(selectedPlanetList.size()==0) {
-			System.out.println("Nothing to do");
 			return;
 		}
 		if(selectedPlanetList.contains(p)) {
@@ -57,12 +56,13 @@ public class Player{
 			p.unselected(this);
 		}
 		
-		ArrayList<Ship> escadron;
+		//ArrayList<Ship> escadron;
 		for(Planet currentPlanet: selectedPlanetList) {
-			escadron = currentPlanet.moveShipTowards(p, 100);
-			for(Ship s: escadron) {
-				this.galaxyItem.add(s);
-			}
+			//escadron = currentPlanet.moveShipTowards(p, 50);
+			currentPlanet.moveShipTowards(p, 50, galaxyItem);
+			//for(Ship s: escadron) {
+			//	this.galaxyItem.add(s);
+			//}
 		}
 		this.clearSelectedPlanet();
 	}

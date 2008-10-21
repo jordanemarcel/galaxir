@@ -5,12 +5,10 @@ import java.util.LinkedList;
 
 import fr.umlv.remix.TimerTask;
 
-public class ProductionTurn implements Runnable {
-	private Collection<? extends GalaxyItem> itemList;
+public class ProductionTurn {
 	private LinkedList<Planet> planetList;
 	
 	public ProductionTurn(Collection<? extends GalaxyItem> itemList) {
-		this.itemList = itemList;
 		planetList = new LinkedList<Planet>();
 		for (GalaxyItem item : itemList) {
 			if(item instanceof Planet)
@@ -18,9 +16,7 @@ public class ProductionTurn implements Runnable {
 		}
 	}
 	
-	
-	@Override
-	public void run() {
+	public void run(TimerTask timerTask) {
 		for (Planet p : planetList){
 			p.startProduction();
 		}

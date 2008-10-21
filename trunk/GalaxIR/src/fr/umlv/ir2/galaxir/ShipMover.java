@@ -6,7 +6,7 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.LinkedList;
 
-public class ShipMover implements Runnable {
+public class ShipMover {
 	private Collection<? extends GalaxyItem> itemList;
 	private LinkedList<Ship> shipList;
 	private LinkedList<GalaxyItem> itemToDelete;
@@ -40,7 +40,6 @@ public class ShipMover implements Runnable {
 		itemToDelete.clear();
 	}
 	
-	@Override
 	public void run() {
 		update();
 		for (Ship s : shipList){
