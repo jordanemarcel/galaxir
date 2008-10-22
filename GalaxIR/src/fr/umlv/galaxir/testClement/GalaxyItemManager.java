@@ -1,6 +1,7 @@
 package fr.umlv.galaxir.testClement;
 
 
+
 import java.awt.Graphics2D;
 import java.awt.Shape;
 import java.awt.geom.Point2D;
@@ -20,12 +21,14 @@ public class GalaxyItemManager implements ItemManager<GalaxyItem> {
 
 	@Override
 	public boolean intersects(Shape selection, GalaxyItem item) {
-		return selection.intersects(item.getRectangleArea());
+		//return selection.intersects(item.getRectangleArea());
+		return false;
 	}
 
 	@Override
 	public boolean isContained(Shape selection, GalaxyItem item) {
-		return selection.contains(item.getRectangleArea());
+		//return selection.contains(item.getRectangleArea());
+		return false;
 	}
 
 }

@@ -1,20 +1,34 @@
 package fr.umlv.galaxir.testClement;
 
 
+
 import java.util.ArrayList;
 import fr.umlv.remix.KeyPress;
 
 public class MouseManager implements fr.umlv.remix.MouseHandler<GalaxyItem> {
 	ArrayList<GalaxyItem> dragList;
-	/*
-	 * in case of a mouse click we swap the color of the corresponding
-	 * TestItems
-	 */
+	
 	@Override
 	public void mouseClicked(ArrayList<GalaxyItem> arg0,KeyPress arg1) {
-		System.out.println("Select " + arg0);
-		for (GalaxyItem testItem : arg0) {
-			testItem.selected();
+		//System.out.println("Select " + arg0);
+		for(GalaxyItem testItem : arg0) {
+			if(testItem instanceof Planet) {
+				Planet p = (Planet)testItem;
+				if(arg1.equals(KeyPress.CRTL)) {
+					if(Player.getHumanPlayer().containsSelectedPlanet(p)) {
+						p.unselectAndRemove(Player.getHumanPlayer());
+					}
+					else {
+						p.selectAndAdd(Player.getHumanPlayer());
+					}
+				} else if(arg1.equals(KeyPress.SHIFT)) {
+					Player.getHumanPlayer().launchShip(p);
+				}
+				else {
+					Player.getHumanPlayer().clearSelectedPlanet();
+					p.selectAndAdd(Player.getHumanPlayer());
+				}
+			}
 		}
 	}        
 
@@ -53,7 +67,7 @@ public class MouseManager implements fr.umlv.remix.MouseHandler<GalaxyItem> {
 	@Override
 	public void mouseOver(ArrayList<GalaxyItem> itemsOver, KeyPress key) {
 		if(!itemsOver.isEmpty()){
-			System.out.println("Over :"+itemsOver);
+			//System.out.println("Over :"+itemsOver);
 		}
 	}
 }
