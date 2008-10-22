@@ -58,6 +58,7 @@ public class SquadronUnleasher {
 		
 		for(int i=0;i<numberToCreate;i++) {
 			Ship currentShip = new Xtwin(new Point2D.Double(currentPoint.getX()/100, currentPoint.getY()/100), squadron.getDestinationPlanet(), squadron.getOwner());
+			currentShip.setSquadron(squadron);
 			AffineTransform at = AffineTransform.getRotateInstance(startAngle, locationDouble.getX()*100, locationDouble.getY()*100);
 			currentPoint = at.transform(calibratedPoint, null);
 			if(startAngle>0)

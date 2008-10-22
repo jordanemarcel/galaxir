@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
+import java.util.ArrayList;
 
 public class Background implements GalaxyItem {
 	private final Color backgroundColor;
@@ -34,6 +35,18 @@ public class Background implements GalaxyItem {
 
 	@Override
 	public void selected(Player player) {
+	}
+	
+	public void unselected(Player player) {
+	}
+	
+	public void moveShipTowards(Planet p, int percentage, ArrayList<GalaxyItem> itemList) {
+		
+	}
+	
+	public void selectAndAdd(Player player) {
+	}
+	public void unselectAndRemove(Player player) {
 	}
 	
 

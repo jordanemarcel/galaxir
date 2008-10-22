@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
+import java.util.ArrayList;
 
 public class Cordon implements GalaxyItem {
 	private final Point2D location;
@@ -36,6 +37,16 @@ public class Cordon implements GalaxyItem {
 	public void selected(Player player) {
 		// TODO Auto-generated method stub
 		
+	}
+	public void unselected(Player player) {
+	}
+	
+	public void moveShipTowards(Planet p, int percentage, ArrayList<GalaxyItem> itemList) {
+
+	}
+	public void selectAndAdd(Player player) {
+	}
+	public void unselectAndRemove(Player player) {
 	}
 
 }

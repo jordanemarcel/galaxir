@@ -154,13 +154,15 @@ public class Planet implements GalaxyItem{
 	public void selectAndAdd(Player player) {
 		if(player==this.getOwner()) {
 			selected = true;
-			player.addSelectedPlanet(this);
+			player.addSelectedItem(this);
 		}
 	}
 	
 	public void unselectAndRemove(Player player) {
-		selected = false;
-		player.removeSelectedPlanet(this);
+		if(player==this.getOwner()) {
+			selected = false;
+			player.removeSelectedItem(this);
+		}
 	}
 	
 	@Override
@@ -188,7 +190,7 @@ public class Planet implements GalaxyItem{
 		Squadron squadron = new Squadron(this, p, owner);
 		
 		
-		Application.timer(200, new SquadronUnleasherTimer(itemList, squadron, number));
+		Application.timer(400, new SquadronUnleasherTimer(itemList, squadron, number));
 		
 		/*if(number>nbShip)
 			return null;*/

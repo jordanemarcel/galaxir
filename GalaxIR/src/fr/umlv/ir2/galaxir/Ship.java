@@ -9,6 +9,8 @@ import java.awt.geom.Point2D;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.Random;
+
+import fr.umlv.remix.Application;
 public abstract class Ship implements GalaxyItem{
 	private final int attack;
 	private final int speed;
@@ -24,6 +26,21 @@ public abstract class Ship implements GalaxyItem{
 	private double rotation = 0;
 	private GalaxyItem previous = null;
 	private boolean toBeDeleted = false;
+	protected Squadron squadron;
+	protected boolean over = false;
+	protected boolean selected = false;
+	
+	public void setOver() {
+		squadron.setOver();
+		for(Ship s: squadron.getShipList())
+			s.over = true;
+	}
+	
+	public void setEndOver() {
+		squadron.setEndOver();
+		for(Ship s: squadron.getShipList())
+			s.over = false;
+	}
 	
 	//private final LinkedList<Point2D> trajectory;
 	public Ship(int attack, int speed, int cost,int size, 
@@ -47,6 +64,16 @@ public abstract class Ship implements GalaxyItem{
 	
 	public Planet getDestination() {
 		return destinationPlanet;
+	}
+	
+	public void setDestination(Planet p) {
+		destinationPlanet = p;
+	}
+	
+	public void setSquadron(Squadron squadron) {
+		this.squadron = squadron;
+		if(squadron.isOver())
+			this.over = true;
 	}
 	
 	public double getRotation() {
@@ -83,10 +110,7 @@ public abstract class Ship implements GalaxyItem{
 	}
 	
 	public abstract boolean intersects(Planet p);
-	@Override
-	public void selected(Player player) {
-		currentColor = (currentColor == 0 ? 1 : 0);
-	}
+
 	public void setLocation(Point2D.Double location){
 		this.location = location;
 	}
@@ -241,7 +265,36 @@ public abstract class Ship implements GalaxyItem{
 			this.rotation = -this.rotation;
 	}
 	
+	public void selectAndAdd(Player player) {
+		if(player==this.getOwner()) {
+			squadron.setSelected();
+			player.addSelectedItem(this);
+		}
+	}
 	
+	public void unselectAndRemove(Player player) {
+		if(player==this.getOwner()) {
+			squadron.setUnselected();
+			player.removeSelectedItem(this);
+		}
+	}
+	
+	public void unselected(Player player) {
+		System.out.println("unselect!!!");
+		squadron.setUnselected();
+	}
+	
+	public void selected(Player player) {
+		squadron.setSelected();
+	}
+	
+	public void moveShipTowards(Planet p) {
+		squadron.changeDestination(p);
+	}
+
+	public void moveShipTowards(Planet p, int percentage, ArrayList<GalaxyItem> itemList) {
+		moveShipTowards(p);
+	}
 	
 	public abstract void attack(Planet p);
 
