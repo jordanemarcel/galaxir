@@ -7,6 +7,7 @@ import java.awt.Point;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
+import java.util.ArrayList;
 import java.util.Random;
 
 public class Xtwin extends Ship{
@@ -18,12 +19,13 @@ public class Xtwin extends Ship{
 	@Override
 	public boolean contains(Point2D p) {
 		// TODO Auto-generated method stub
-		return false;
+		return p.distance(this.getLocation())<10;
 	}
 	
 	public int getRadius() {
 		return getSize();
 	}
+
 	
 	public static double getStaticSize() {
 		return 5;
@@ -41,6 +43,10 @@ public class Xtwin extends Ship{
 		Point2D pos = getLocation();
         int x = (int) pos.getX(), y = (int) pos.getY(), w = super.getSize();
         g.setColor(Color.blue);
+        if(this.over)
+        	g.setColor(Color.white);
+        if(this.squadron.isSelected())
+        	g.setColor(Color.yellow);
         /* g.drawLine(x, y, x-w/2, y+w);
         g.drawLine(x, y, x+w/2, y+w);
         g.drawLine(x-w/2, y+w, x+w/2, y+w);*/

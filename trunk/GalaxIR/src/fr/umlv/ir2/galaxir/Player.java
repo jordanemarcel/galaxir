@@ -10,7 +10,7 @@ public class Player{
 	private final String name;
 	private static Player humanPlayer;
 	private ArrayList<GalaxyItem> galaxyItem;
-	private ArrayList<Planet> selectedPlanetList = new ArrayList<Planet>();
+	private ArrayList<GalaxyItem> selectedItem = new ArrayList<GalaxyItem>();
 	
 	public Player(String name, Color mainColor, Color auxColor, ArrayList<GalaxyItem> galaxyItem) {
 		this.name = name;
@@ -28,43 +28,43 @@ public class Player{
 		return playerId;
 	}
 	
-	public void addSelectedPlanet(Planet p) {
-		selectedPlanetList.add(p);
+	public void addSelectedItem(GalaxyItem gi) {
+		selectedItem.add(gi);
 	}
 	
-	public void removeSelectedPlanet(Planet p) {
-		selectedPlanetList.remove(p);
+	public void removeSelectedItem(GalaxyItem gi) {
+		selectedItem.remove(gi);
 	}
 	
-	public boolean containsSelectedPlanet(Planet p) {
-		return selectedPlanetList.contains(p);
+	public boolean containsSelectedItem(GalaxyItem gi) {
+		return selectedItem.contains(gi);
 	}
 	
-	public void clearSelectedPlanet() {
-		for(Planet p: selectedPlanetList) {
-			p.unselected(this);
+	public void clearSelectedItem() {
+		for(GalaxyItem gi: selectedItem) {
+			gi.unselected(this);
 		}
-		selectedPlanetList.clear();
+		selectedItem.clear();
 	}
 	
 	public void launchShip(Planet p) {
-		if(selectedPlanetList.size()==0) {
+		if(selectedItem.size()==0) {
 			return;
 		}
-		if(selectedPlanetList.contains(p)) {
-			selectedPlanetList.remove(p);
+		if(selectedItem.contains(p)) {
+			selectedItem.remove(p);
 			p.unselected(this);
 		}
 		
 		//ArrayList<Ship> escadron;
-		for(Planet currentPlanet: selectedPlanetList) {
+		for(GalaxyItem currentItem: selectedItem) {
 			//escadron = currentPlanet.moveShipTowards(p, 50);
-			currentPlanet.moveShipTowards(p, 50, galaxyItem);
+			currentItem.moveShipTowards(p, 50, galaxyItem);
 			//for(Ship s: escadron) {
 			//	this.galaxyItem.add(s);
 			//}
 		}
-		this.clearSelectedPlanet();
+		this.clearSelectedItem();
 	}
 	
 	public static Player getHumanPlayer() {
