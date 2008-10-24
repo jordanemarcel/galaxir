@@ -6,15 +6,26 @@ public class Squadron {
 	private Planet source;
 	private Planet destination;
 	private Player owner;
+	private SquadronUnleasher squadronUnleasher;
 	private ArrayList<Ship> squadron = new ArrayList<Ship>();
 	private boolean over = false;
 	private boolean selected = false;
 
+	
+	public SquadronUnleasher getSquadronUnleasher() {
+		return squadronUnleasher;
+	}
+	
+	public void setSquadronUnleasher(SquadronUnleasher squadronUnleasher) {
+		this.squadronUnleasher = squadronUnleasher;
+	}
+	
 	public void changeDestination(Planet p) {
 		destination = p;
 		for(Ship s: squadron) {
 			s.setDestination(p);
 		}
+		squadronUnleasher.computeWhatINeed();
 	}
 	
 	public void setOver() {

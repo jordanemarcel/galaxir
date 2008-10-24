@@ -26,10 +26,23 @@ public class Planet implements GalaxyItem{
 	//private final Rectangle2D shape;
 	private boolean over;
 	private boolean selected;
+	private int selectedArc = 0;
 	
 	public void startProduction() {
 		if(owner!=null)
 			this.nbShip += shipRepop/60;
+	}
+	
+	public void setOver() {
+		if(Player.getHumanPlayer()==owner) {
+			if(!over)
+				SoundEffect.playMouseOver();
+			over = true;
+		}
+	}
+	
+	public void setEndOver() {
+		over = false;
 	}
 
 	public Planet(ArrayList<GalaxyItem> testItemList) {
@@ -77,8 +90,16 @@ public class Planet implements GalaxyItem{
 		nbShip = nb;
 	}
 	
+	public void setNbShip(double nb) {
+		nbShip = nb;
+	}
+	
 	public int getNbShip() {
 		return (int)Math.floor(nbShip);
+	}
+	
+	public double getNbShipDouble() {
+		return nbShip;
 	}
 	
 	public void setOwner(Player owner) {
@@ -128,9 +149,16 @@ public class Planet implements GalaxyItem{
 	}
 	@Override
 	public void draw(Graphics2D g) {
+		g.setColor(Color.lightGray);
+		g.fillOval((int)location.getX()-(width+4)/2, (int)location.getY()-(width+4)/2, width+4, width+4);
 		if(over){
-			g.setColor(Color.green);
-			g.fillOval((int)location.getX()-3, (int)location.getY()-3, width+6, width+6);
+			selectedArc++;
+			if(selectedArc>360)
+				selectedArc = 0;
+			g.setColor(Color.white);
+			g.fillArc((int)location.getX()-(width+8)/2, (int)location.getY()-(width+8)/2, width+8, width+8, 0+selectedArc, 90);
+			g.fillArc((int)location.getX()-(width+8)/2, (int)location.getY()-(width+8)/2, width+8, width+8, 180+selectedArc, 90);
+			//g.fillOval((int)location.getX()-(width+8)/2, (int)location.getY()-(width+8)/2, width+8, width+8);
 		}
 		g.setColor(this.getColor());
 		if(owner!=null) {
@@ -155,6 +183,7 @@ public class Planet implements GalaxyItem{
 		if(player==this.getOwner()) {
 			selected = true;
 			player.addSelectedItem(this);
+			SoundEffect.playMouseClick();
 		}
 	}
 	
@@ -162,6 +191,7 @@ public class Planet implements GalaxyItem{
 		if(player==this.getOwner()) {
 			selected = false;
 			player.removeSelectedItem(this);
+			SoundEffect.playMouseClick();
 		}
 	}
 	
@@ -188,7 +218,6 @@ public class Planet implements GalaxyItem{
 		 */
 		
 		Squadron squadron = new Squadron(this, p, owner);
-		
 		
 		Application.timer(400, new SquadronUnleasherTimer(itemList, squadron, number));
 		

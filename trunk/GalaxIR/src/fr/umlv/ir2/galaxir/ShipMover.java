@@ -1,9 +1,8 @@
 package fr.umlv.ir2.galaxir;
 
 
-import java.awt.geom.Point2D;
+import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Iterator;
 import java.util.LinkedList;
 
 public class ShipMover {
@@ -33,8 +32,17 @@ public class ShipMover {
 			}
 			else if(item instanceof Planet)
 				planetList.add((Planet)item);
+			else if(item instanceof Explosion) {
+				Explosion e = (Explosion)item;
+				if(e.toBeDeleted())
+					itemToDelete.add(item);
+			}
 		}
 		for(GalaxyItem item: itemToDelete) {
+			if(item instanceof Ship) {
+				Ship s = (Ship)item;
+				Player.getHumanPlayer().addAnExplosion(s);
+			}
 			itemList.remove(item);
 		}
 		itemToDelete.clear();

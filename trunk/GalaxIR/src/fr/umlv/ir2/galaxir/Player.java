@@ -18,6 +18,14 @@ public class Player{
 		this.auxColor = auxColor;
 		this.galaxyItem = galaxyItem;
 	}
+	
+	public void addAnExplosion(Ship s) {
+		if(s.getOwner()!=s.getDestination().getOwner()) {
+			Explosion e = new Explosion((int)s.getLocation().getX(),(int)s.getLocation().getY());
+			galaxyItem.add(e);
+		}
+	}
+	
 	public Color getAuxColor() {
 		return auxColor;
 	}
@@ -51,6 +59,7 @@ public class Player{
 		if(selectedItem.size()==0) {
 			return;
 		}
+		SoundEffect.playGogogo();
 		if(selectedItem.contains(p)) {
 			selectedItem.remove(p);
 			p.unselected(this);

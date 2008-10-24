@@ -12,6 +12,8 @@ import java.util.Random;
 
 public class Xtwin extends Ship{
 
+	private int selectedArc = 0;
+	
 	public Xtwin( Point2D.Double location,Planet destinationPlanet,Player owner) {
 		super(1, 2, 1, 5, location, destinationPlanet, owner);
 	}
@@ -42,11 +44,12 @@ public class Xtwin extends Ship{
 	public void draw(Graphics2D g) {
 		Point2D pos = getLocation();
         int x = (int) pos.getX(), y = (int) pos.getY(), w = super.getSize();
-        g.setColor(Color.blue);
-        if(this.over)
+        g.setColor(this.getOwner().getMainColor());
+        if(over){
         	g.setColor(Color.white);
+		}
         if(this.squadron.isSelected())
-        	g.setColor(Color.yellow);
+        	g.setColor(this.getOwner().getAuxColor());
         /* g.drawLine(x, y, x-w/2, y+w);
         g.drawLine(x, y, x+w/2, y+w);
         g.drawLine(x-w/2, y+w, x+w/2, y+w);*/
@@ -81,8 +84,10 @@ public class Xtwin extends Ship{
 		
 		if(this.getOwner()==p.getOwner())
 			lastShip = p.getNbShip() + this.getAttack();
-		else
+		else {
 			lastShip = p.getNbShip() - this.getAttack();
+			SoundEffect.playAttack();
+		}
 		
 		if(lastShip<=0) {
 			lastShip = 0;

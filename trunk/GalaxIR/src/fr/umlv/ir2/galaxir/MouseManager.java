@@ -48,11 +48,11 @@ public class MouseManager implements fr.umlv.remix.MouseHandler<GalaxyItem> {
 	@Override
 	public void mouseDrag(ArrayList<GalaxyItem> itemsDrag, KeyPress key) {
 		for(GalaxyItem testItem : itemsDrag) {
-			if(testItem instanceof Planet) {
+			
 				if(!Player.getHumanPlayer().containsSelectedItem(testItem)) {
 					testItem.selectAndAdd(Player.getHumanPlayer());
 				}
-			}
+			
 		}
 	}
 	
@@ -83,6 +83,12 @@ public class MouseManager implements fr.umlv.remix.MouseHandler<GalaxyItem> {
 					s.setEndOver();
 				}
 			}
+			if(gi instanceof Planet) {
+				if(!itemsOver.contains(gi)) {
+					Planet p = (Planet)gi;
+					p.setEndOver();
+				}
+			}
 		}
 		overList.clear();
 		if(!itemsOver.isEmpty()){
@@ -91,6 +97,11 @@ public class MouseManager implements fr.umlv.remix.MouseHandler<GalaxyItem> {
 					overList.add(gi);
 					Ship s = (Ship)gi;
 					s.setOver();
+				}
+				if(gi instanceof Planet) {
+					overList.add(gi);
+					Planet p = (Planet)gi;
+					p.setOver();
 				}
 			}
 		}
