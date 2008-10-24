@@ -18,6 +18,7 @@ public class SquadronUnleasher {
 	public SquadronUnleasher(int numberOfShip, Squadron squadron, ArrayList<GalaxyItem> itemList) {
 		this.numberOfShip = numberOfShip;
 		this.squadron = squadron;
+		squadron.setSquadronUnleasher(this);
 		this.itemList = itemList;
 		this.computeWhatINeed();
 	}
@@ -49,6 +50,12 @@ public class SquadronUnleasher {
 	}
 	
 	public void run(TimerTask timerTask) {
+		if(squadron.getSourcePlanet()==squadron.getDestinationPlanet()) {
+			timerTask.cancel();
+			double nbShip = squadron.getSourcePlanet().getNbShipDouble();
+			squadron.getSourcePlanet().setNbShip(nbShip + numberOfShip);
+			return;
+		}
 		int numberToCreate = shipPerSubSquadron();
 		if(numberToCreate>numberOfShip)
 			numberToCreate = numberOfShip;

@@ -20,7 +20,7 @@ import fr.umlv.remix.Application;
 public class RemixTest {
 
 	public static void main(String[] args) {
-		
+
 		ArrayList<GalaxyItem> testItemList = new ArrayList<GalaxyItem>();
 		testItemList.add(new Background(640, 480, Color.black));
 		Player p = new Player("Clement",Color.red,Color.pink,testItemList);
