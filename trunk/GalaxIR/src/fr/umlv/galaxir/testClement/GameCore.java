@@ -31,7 +31,7 @@ public class GameCore implements ApplicationRunnable<GalaxyItem> {
 		NEW{
 			@Override
 			public String getName(){
-				return "new random map";
+				return "New random map";
 			}
 			@Override
 			public void performed(){
@@ -41,7 +41,7 @@ public class GameCore implements ApplicationRunnable<GalaxyItem> {
 		LOAD{
 			@Override
 			public String getName(){
-				return "load map";
+				return "Load map";
 			}
 			@Override
 			public void performed(){
@@ -76,7 +76,7 @@ public class GameCore implements ApplicationRunnable<GalaxyItem> {
 		SAVE{
 			@Override
 			public String getName(){
-				return "save map";
+				return "Save map";
 			}
 			@Override
 			public void performed(){
@@ -86,7 +86,7 @@ public class GameCore implements ApplicationRunnable<GalaxyItem> {
 		QUIT{
 			@Override
 			public String getName(){
-				return "quit";
+				return "Quit this fucking game";
 			}
 			@Override
 			public void performed(){
