@@ -1,8 +1,5 @@
 package fr.umlv.ir2.galaxir;
 
-
-import java.awt.Color;
-import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Point2D;
@@ -10,7 +7,6 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.Random;
 
-import fr.umlv.remix.Application;
 public abstract class Ship implements GalaxyItem{
 	private final int attack;
 	private final int speed;
@@ -19,8 +15,6 @@ public abstract class Ship implements GalaxyItem{
 	private final Player owner;
 	private Point2D.Double location;
 	private Planet destinationPlanet;
-	private final Color[] colors;
-	private int currentColor;
 	private double angleWay = 0;
 	private double angleWayTime = 0;
 	private double rotation = 0;
@@ -42,7 +36,10 @@ public abstract class Ship implements GalaxyItem{
 			s.over = false;
 	}
 	
-	//private final LinkedList<Point2D> trajectory;
+	public int getRadius() {
+		return getSize()/2;
+	}
+	
 	public Ship(int attack, int speed, int cost,int size, 
 			Point2D.Double location, Planet destination,Player owner) {
 		this.attack = attack;
@@ -51,15 +48,7 @@ public abstract class Ship implements GalaxyItem{
 		this.location = location;
 		this.size = size;
 		this.destinationPlanet = destination;
-
-		/*while(this.destination.distance(320, 240)<150) {
-			this.destination = new Point.Double(r.nextInt(640), r.nextInt(320));
-		}*/
 		this.owner = owner;
-		colors = new Color[2];
-		colors[0] =owner.getMainColor();
-		colors[1] = owner.getAuxColor();
-		//trajectory = new LinkedList<Point2D>();
 	}
 	
 	public Planet getDestination() {
@@ -114,50 +103,30 @@ public abstract class Ship implements GalaxyItem{
 	public void setLocation(Point2D.Double location){
 		this.location = location;
 	}
-	//public void setDestination(Point2D destination){
-		//this.destination = destination;
-	//}
+
 	public void move(LinkedList<Planet> planetList){
 		Point2D.Double destination = new Point2D.Double(destinationPlanet.getLocation().getX(),destinationPlanet.getLocation().getY());
-		if(location.distance(destination) < speed)
+		double distance = location.distance(destination);
+		if(distance < speed)
 			location=destination;
 		if (location.equals(destination))
 			return;
-		//System.out.println("-------------------");
-		double distance = location.distance(destination);
-		//System.out.println("Distance="+distance);
+		
 		double distanceX = destination.getX() - location.getX();
 		double distanceY = destination.getY() - location.getY();
-		//System.out.println("DisX="+distanceX+" DisY="+distanceY);
+
 		double moveX = distanceX*speed/distance;
 		double moveY = distanceY*speed/distance;
-		//System.out.println("MovX="+moveX+" MovY="+moveY);
 		
 		double angle = 0;
 		double farAngle = 0;
-		/*
-		int intMoveX;
-		int intMoveY;
-		bufferX += moveX;
-		bufferY += moveY;
-		if(bufferX<0)
-			intMoveX = (int)Math.ceil(bufferX);
-		else
-			intMoveX = (int)Math.floor(bufferX);
-		if(bufferY<0)
-			intMoveY = (int)Math.ceil(bufferY);
-		else
-			intMoveY = (int)Math.floor(bufferY);
-		bufferX -= (double)intMoveX;
-		bufferY -= (double)intMoveY;
-		*/
-		//System.out.println("Old: "+location.getX()+","+location.getY());
-		//System.out.println("MovX="+moveX+" MovY="+moveY);
+
 		double nextX = location.getX() + moveX;
 		double nextY = location.getY() + moveY;
-		//System.out.println("New: "+nextX+","+nextY);
+
 		double centerX = location.getX();
 		double centerY = location.getY();
+		
 		double rotateX = location.getX()*100;
 		double rotateY = location.getY()*100;
 		this.setLocation(new Point.Double(nextX, nextY));
@@ -167,23 +136,15 @@ public abstract class Ship implements GalaxyItem{
 		while(collision) {
 			collision = false;
 			for(Planet p: planetList) {
-				//System.out.println("One"+p);
-				//while(p.contains(new Point((int)nextX, (int)nextY))) {
 				while(this.intersects(p)) {
 					if(p==destinationPlanet) {
 						this.attack(p);
 						return;
 					}
-					//System.out.println(bug++);
-					//System.out.println("Old: "+location.getX()+","+location.getY());
-					//System.out.println("New: "+nextX+","+nextY);
-					//System.out.println("Collision!");
 					collision = true;
 					farAngle += 10;
 					
-					
 					if(angleWayTime==0) {
-						//System.out.println(farAngle);
 						if(angle<0)
 							angle = farAngle;
 						else
@@ -217,20 +178,10 @@ public abstract class Ship implements GalaxyItem{
 					op2D = new Point2D.Double(nextX*100, nextY*100);
 					AffineTransform at = AffineTransform.getRotateInstance(Math.toRadians(angle), rotateX, rotateY);
 					np2D = at.transform(op2D, null);
-					//System.out.println("Centre x="+rotateX+", centre y="+rotateY);
-					//System.out.println("X="+nextX+", Y="+nextY);
-					//at.getTranslateX();
-					//at.getTranslateY();
-					//newPoint = this.rotate(nextX, nextY, location.getX(), location.getY(), angle);
-					//System.out.println(location.getX()*100+","+location.getY()*100);
-					//System.out.println(goAroundWay);
-					//System.out.println(nextX+","+nextY);
+					
 					nextX = np2D.getX()/100;
 					nextY = np2D.getY()/100;
-					//System.out.println(nextX+","+nextY);
-					//l.add(new Cordon(new Point.Double(rotateX/100, rotateY/100), new Point.Double(nextX, nextY)));
-					//System.out.println(angle);
-					//l.add(new Cordon(new Point.Double(320, 240), new Point.Double(nextX, nextY)));
+
 					this.setLocation(new Point.Double(nextX, nextY));
 				}
 				if(angle<0) {
@@ -238,15 +189,11 @@ public abstract class Ship implements GalaxyItem{
 				} else if(angle>0) {
 					angleWay = 1;
 				}
-				//System.out.println("AngleWay: "+angleWay);
 				if(collision) {
 					angleWayTime = 3;
 				}
-				//System.out.println("OK");
-				//System.out.println(farAngle*goAroundWay);
 				angle = 0;
 				farAngle = 0;
-				//System.out.println("NEXT");
 			}
 		}
 		angleWayTime--;
@@ -254,13 +201,9 @@ public abstract class Ship implements GalaxyItem{
 			angleWayTime = 0;
 			angleWay = 0;
 		}
-		//System.out.println("FINISH");
-		//System.out.println(nextX+","+nextY);
-		//System.out.println("----------");
-		//l.add(new Cordon(new Point.Double(location.getX(), location.getY()), new Point.Double(nextX, nextY)));
 		setLocation(new Point.Double(nextX, nextY));
 		Point2D.Double top = Trigo.findUpperPoint(new Point2D.Double(centerX, centerY));
-		this.rotation = Trigo.computeAngle(new Point2D.Double(centerX, centerY), top, new Point.Double(nextX, nextY));
+		this.rotation = Trigo.findAngle(new Point2D.Double(centerX, centerY), top, new Point.Double(nextX, nextY));
 		if(nextX<centerX)
 			this.rotation = -this.rotation;
 	}
@@ -280,7 +223,6 @@ public abstract class Ship implements GalaxyItem{
 	}
 	
 	public void unselected(Player player) {
-		System.out.println("unselect!!!");
 		squadron.setUnselected();
 	}
 	
@@ -296,6 +238,24 @@ public abstract class Ship implements GalaxyItem{
 		moveShipTowards(p);
 	}
 	
-	public abstract void attack(Planet p);
-
+	public void attack(Planet p) {
+		int lastShip;
+		if(this.getOwner()==p.getOwner())
+			lastShip = p.getNbShip() + this.getAttack();
+		else {
+			lastShip = p.getNbShip() - this.getAttack();
+			SoundEffect.playAttack();
+		}
+		
+		if(lastShip<=0) {
+			if(!p.callReinforcement()) {
+				lastShip = 0;
+				p.setOwner(this.getOwner());
+			} else {
+				lastShip = p.getNbShip();
+			}
+		}
+		p.setNbShip(lastShip);
+		this.delete();
+	}
 }

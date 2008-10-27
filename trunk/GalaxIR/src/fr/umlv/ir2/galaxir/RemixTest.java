@@ -23,24 +23,20 @@ public class RemixTest {
 
 		ArrayList<GalaxyItem> testItemList = new ArrayList<GalaxyItem>();
 		testItemList.add(new Background(640, 480, Color.black));
+		testItemList.add(new StatusBar());
 		Player p = new Player("Clement",Color.red,Color.pink,testItemList);
+		Player p2 = new Player("Jordane",Color.blue,Color.cyan,testItemList);
 		Player.setHumanPlayer(p);
 		
 		Random random = new Random();
-		testItemList.add(new Planet(10000,50,100,new Point(random.nextInt(640),random.nextInt(480)), p));
 		testItemList.add(new Planet(100,50,100,new Point(random.nextInt(640),random.nextInt(480)), p));
-		testItemList.add(new Planet(100,50,100,new Point(random.nextInt(640),random.nextInt(480)), p));
+		testItemList.add(new Planet(100,50,100,new Point(random.nextInt(640),random.nextInt(480)), p2));
 		for (int i = 1; i <= 10; i++) {
 			testItemList.add(new Planet(testItemList));
 		}
-		/*
-		for (int i = 1; i <= 5; i++) {
-			testItemList.add(new Xtwin(new Point.Double(random.nextInt(640),random.nextInt(480))
-			,new Point.Double(random.nextInt(640),random.nextInt(480)),p));
-			//testItemList.add(new Planet(100,50,i+10,new Point(random.nextInt(640),random.nextInt(480)),null ));
-		}*/
 
 		GalaxyItemManager manager = new GalaxyItemManager();
 		Application.run(testItemList, manager, new GameCore());
+		Application.timer(100, new AITimer(testItemList, p2));
 	}
 }

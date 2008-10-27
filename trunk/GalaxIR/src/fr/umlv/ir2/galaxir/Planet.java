@@ -1,32 +1,27 @@
 package fr.umlv.ir2.galaxir;
 
-
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Point;
-import java.awt.geom.AffineTransform;
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
 import java.util.Random;
 
-import javax.swing.Timer;
+import com.sun.xml.internal.bind.v2.TODO;
 
 import fr.umlv.remix.Application;
-import fr.umlv.remix.TimerTask;
 
 
 public class Planet implements GalaxyItem{
 	private double nbShip;
-	private int currentColor;
 	private Player owner;
 	private final double shipRepop;
 	private final int width;
 	private final Point2D location;
-	private final Color[] colors = { Color.blue, Color.cyan };
-	//private final Rectangle2D shape;
 	private boolean over;
 	private boolean selected;
 	private int selectedArc = 0;
+	private ArrayList<SquadronUnleasher> squadronList = new ArrayList<SquadronUnleasher>();
 	
 	public void startProduction() {
 		if(owner!=null)
@@ -123,9 +118,6 @@ public class Planet implements GalaxyItem{
 	public Point2D getLocation() {
 		return location;
 	}
-	public Color getColor() {
-		return colors[currentColor];
-	}
 	
     public static double circleDistance(Point2D p1, Point2D p2) {
         double dx = p1.getX() - p2.getX();
@@ -160,7 +152,6 @@ public class Planet implements GalaxyItem{
 			g.fillArc((int)location.getX()-(width+8)/2, (int)location.getY()-(width+8)/2, width+8, width+8, 180+selectedArc, 90);
 			//g.fillOval((int)location.getX()-(width+8)/2, (int)location.getY()-(width+8)/2, width+8, width+8);
 		}
-		g.setColor(this.getColor());
 		if(owner!=null) {
 			if(!selected)
 				g.setColor(owner.getMainColor());
@@ -172,6 +163,21 @@ public class Planet implements GalaxyItem{
 		g.setColor(Color.white);
 		String s = new String(""+this.getNbShip());
 		g.drawString(s, (int)location.getX()-5, (int)location.getY()+5);
+		
+		int total = 0;
+		for( int i = 0; i<squadronList.size(); i++ ) {
+			SquadronUnleasher su = squadronList.get(i);
+			int shipLeft = su.getNumberOfShip();
+			if(shipLeft==0) {
+				squadronList.remove(i);
+			}
+			total += shipLeft;
+		}
+		
+		
+		s = new String("+"+total);
+		if(total>0)
+			g.drawString(s, (int)location.getX()-5, (int)location.getY()+15);
 	}
 
 	/*@Override
@@ -209,54 +215,26 @@ public class Planet implements GalaxyItem{
 		return (distance<(this.getRadius()+width/2));
 	}
 	
+	public boolean callReinforcement() {
+		if(squadronList.size()==0)
+			return false;
+		SquadronUnleasher su = squadronList.get(0);
+		this.nbShip += su.getNumberOfShip();
+		su.setNumberOfShip(0);
+		return true;
+	}
+	
 	public void moveShipTowards(Planet p, int percentage, ArrayList<GalaxyItem> itemList) {
 		
-		int number = (int)Math.floor(nbShip * percentage / 100);
+		int number = (int)Math.floor(nbShip * owner.getPercentage() / 100);
 		nbShip -= number;
-		/*
-		 * Penser à calculer le timer ideal
-		 */
+		
+		// Pensez à mesurer le timer ideal!
 		
 		Squadron squadron = new Squadron(this, p, owner);
+		SquadronUnleasher squadronUnleasher = new SquadronUnleasher(number, squadron, itemList);
+		squadronList.add(squadronUnleasher);
 		
-		Application.timer(400, new SquadronUnleasherTimer(itemList, squadron, number));
-		
-		/*if(number>nbShip)
-			return null;*/
-		/*
-		Point2D.Double locationDouble = new Point2D.Double(this.getLocation().getX(), this.getLocation().getY());
-		Point2D.Double top = Trigo.findUpperPoint(locationDouble);
-		Point2D.Double destinationDouble = new Point2D.Double(p.getLocation().getX(), p.getLocation().getY());
-		double angle = Trigo.computeAngle(locationDouble, top, destinationDouble);
-		if(locationDouble.getX()>destinationDouble.getX())
-			angle = -angle;
-		
-		double creationX = locationDouble.getX();
-		double creationY = locationDouble.getY() - this.getRadius() - Xtwin.getStaticSize();
-		
-		Point2D.Double leftPoint = new Point2D.Double(creationX - Xtwin.getStaticSize()/2, creationY);
-		Point2D.Double rightPoint = new Point2D.Double(creationX + Xtwin.getStaticSize()/2, creationY);
-		
-		double angleOfRotation = Trigo.computeAngle(locationDouble, leftPoint, rightPoint);
-		Point2D calibratedPoint = new Point((int)(creationX*100), (int)(creationY*100));
-		AffineTransform at = AffineTransform.getRotateInstance(angle, locationDouble.getX()*100, locationDouble.getY()*100);
-		Point2D currentPoint = at.transform(calibratedPoint, null);
-		calibratedPoint = new Point((int)currentPoint.getX(), (int)currentPoint.getY());
-		angle = angleOfRotation;
-		
-		for(int i=0;i<number;i++) {
-			escadron.add(new Xtwin(new Point2D.Double(currentPoint.getX()/100, currentPoint.getY()/100), p, this.owner));
-			at = AffineTransform.getRotateInstance(angle, locationDouble.getX()*100, locationDouble.getY()*100);
-			currentPoint = at.transform(calibratedPoint, null);
-			if(angle>=0)
-				angle = -angle;
-			else {
-				angle = -angle;
-				angle += angleOfRotation;
-			}
-		}
-		for(Ship s: escadron) {
-			itemList.add(s);
-		}*/
+		Application.timer(400, new SquadronUnleasherTimer(squadronUnleasher));
 	}
 }

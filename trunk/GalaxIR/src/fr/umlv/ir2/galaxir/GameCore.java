@@ -1,17 +1,13 @@
 package fr.umlv.ir2.galaxir;
-import java.util.Collection;
 
+import java.util.Collection;
 import javax.swing.JFrame;
 import javax.swing.WindowConstants;
-
 import fr.umlv.remix.Application;
 import fr.umlv.remix.ApplicationRunnable;
 import fr.umlv.remix.Arena;
 import fr.umlv.remix.KeyHandler;
 import fr.umlv.remix.MouseHandler;
-import fr.umlv.remix.TimerRunnable;
-import fr.umlv.remix.TimerTask;
-
 
 public class GameCore implements ApplicationRunnable<GalaxyItem> {
 	/*
@@ -37,7 +33,7 @@ public class GameCore implements ApplicationRunnable<GalaxyItem> {
 		 */
 		final KeyHandler keyHandler = new KeyManager(frame);
 		frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-		frame.add(arena.createComponent(640, 480, mouseHandler, keyHandler));
+		frame.add(arena.createComponent(640, 500, mouseHandler, keyHandler));
 		frame.pack();
 		frame.setVisible(true);
 		/*

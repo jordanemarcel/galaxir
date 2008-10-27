@@ -41,8 +41,7 @@ public class MouseManager implements fr.umlv.remix.MouseHandler<GalaxyItem> {
 	 */
 	@Override
 	public void mouseWheelMoved(ArrayList<GalaxyItem> arg0,	KeyPress arg1, int arg2) {
-		System.out.println(arg0 + " using " + arg1.toString()
-				+ " wheel rotate " + arg2);
+		Player.getHumanPlayer().setPercentage(Player.getHumanPlayer().getPercentage() - arg2*5);
 	}
 
 	@Override
