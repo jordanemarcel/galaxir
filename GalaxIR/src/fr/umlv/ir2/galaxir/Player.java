@@ -9,8 +9,24 @@ public class Player{
 	private final Color auxColor;
 	private final String name;
 	private static Player humanPlayer;
+	private static Player ordiPlayer;
 	private ArrayList<GalaxyItem> galaxyItem;
 	private ArrayList<GalaxyItem> selectedItem = new ArrayList<GalaxyItem>();
+	private int percentage = 50;
+	
+	public void setPercentage(int percentage) {
+		if(percentage>100)
+			percentage = 100;
+		if(percentage<5)
+			percentage = 5;
+		this.percentage = percentage;
+	}
+	
+	public int getPercentage() {
+		return percentage;
+	}
+	
+	
 	
 	public Player(String name, Color mainColor, Color auxColor, ArrayList<GalaxyItem> galaxyItem) {
 		this.name = name;

@@ -15,6 +15,10 @@ public class SquadronUnleasher {
 	Point2D calibratedPoint;
 	Point2D.Double locationDouble;
 	
+	public int getNumberOfShip() {
+		return numberOfShip;
+	}
+	
 	public SquadronUnleasher(int numberOfShip, Squadron squadron, ArrayList<GalaxyItem> itemList) {
 		this.numberOfShip = numberOfShip;
 		this.squadron = squadron;
@@ -23,21 +27,25 @@ public class SquadronUnleasher {
 		this.computeWhatINeed();
 	}
 	
+	public void setNumberOfShip(int number) {
+		numberOfShip = number;
+	}
+	
 	public void computeWhatINeed() {
 		locationDouble = new Point2D.Double(squadron.getSourcePlanet().getLocation().getX(), squadron.getSourcePlanet().getLocation().getY());
 		Point2D.Double top = Trigo.findUpperPoint(locationDouble);
 		Point2D.Double destinationDouble = new Point2D.Double(squadron.getDestinationPlanet().getLocation().getX(), squadron.getDestinationPlanet().getLocation().getY());
-		double startAngle = Trigo.computeAngle(locationDouble, top, destinationDouble);
+		double startAngle = Trigo.findAngle(locationDouble, top, destinationDouble);
 		if(locationDouble.getX()>destinationDouble.getX())
 			startAngle = -startAngle;
 		
 		double creationX = locationDouble.getX();
 		double creationY = locationDouble.getY() - squadron.getSourcePlanet().getRadius() - Xtwin.getStaticSize();
 		
-		Point2D.Double leftPoint = new Point2D.Double(creationX - Xtwin.getStaticSize()/2 - 10, creationY);
-		Point2D.Double rightPoint = new Point2D.Double(creationX + Xtwin.getStaticSize()/2 + 10, creationY);
+		Point2D.Double leftPoint = new Point2D.Double(creationX - Xtwin.getStaticSize()/2, creationY);
+		Point2D.Double rightPoint = new Point2D.Double(creationX + Xtwin.getStaticSize()/2, creationY);
 		
-		angleOfRotation = Trigo.computeAngle(locationDouble, leftPoint, rightPoint);
+		angleOfRotation = Trigo.findAngle(locationDouble, leftPoint, rightPoint);
 		
 		calibratedPoint = new Point((int)(creationX*100), (int)(creationY*100));
 		AffineTransform at = AffineTransform.getRotateInstance(startAngle, locationDouble.getX()*100, locationDouble.getY()*100);
@@ -54,6 +62,7 @@ public class SquadronUnleasher {
 			timerTask.cancel();
 			double nbShip = squadron.getSourcePlanet().getNbShipDouble();
 			squadron.getSourcePlanet().setNbShip(nbShip + numberOfShip);
+			numberOfShip = 0;
 			return;
 		}
 		int numberToCreate = shipPerSubSquadron();

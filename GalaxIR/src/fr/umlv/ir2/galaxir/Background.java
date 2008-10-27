@@ -3,7 +3,6 @@ package fr.umlv.ir2.galaxir;
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.geom.Point2D;
-import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
 
 public class Background implements GalaxyItem {
@@ -28,24 +27,23 @@ public class Background implements GalaxyItem {
 		g.fillRect(0, 0, width, height);
 	}
 
-	/*@Override
-	public Rectangle2D getRectangleArea() {
-		return null;
-	}*/
-
 	@Override
 	public void selected(Player player) {
 	}
 	
+	@Override
 	public void unselected(Player player) {
 	}
 	
+	@Override
 	public void moveShipTowards(Planet p, int percentage, ArrayList<GalaxyItem> itemList) {
-		
 	}
 	
+	@Override
 	public void selectAndAdd(Player player) {
 	}
+	
+	@Override
 	public void unselectAndRemove(Player player) {
 	}
 	

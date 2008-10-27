@@ -20,7 +20,6 @@ public class Explosion implements GalaxyItem {
 	
 	@Override
 	public boolean contains(Point2D p) {
-		// TODO Auto-generated method stub
 		return false;
 	}
 
