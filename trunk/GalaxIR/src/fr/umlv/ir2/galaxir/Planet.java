@@ -9,6 +9,7 @@ import java.util.Random;
 
 import com.sun.xml.internal.bind.v2.TODO;
 
+import fr.umlv.ir2.galaxir.ShipFactory.ShipType;
 import fr.umlv.remix.Application;
 
 
@@ -19,26 +20,10 @@ public class Planet implements GalaxyItem{
 	private final int width;
 	private final Point2D location;
 	private boolean over;
+	private ShipType currentShipType;
 	private boolean selected;
 	private int selectedArc = 0;
 	private ArrayList<SquadronUnleasher> squadronList = new ArrayList<SquadronUnleasher>();
-	
-	public void startProduction() {
-		if(owner!=null)
-			this.nbShip += shipRepop/60;
-	}
-	
-	public void setOver() {
-		if(Player.getHumanPlayer()==owner) {
-			if(!over)
-				SoundEffect.playMouseOver();
-			over = true;
-		}
-	}
-	
-	public void setEndOver() {
-		over = false;
-	}
 
 	public Planet(ArrayList<GalaxyItem> testItemList) {
 		Random random = new Random();
@@ -67,6 +52,7 @@ public class Planet implements GalaxyItem{
 		this.shipRepop = random.nextInt(100);
 		this.nbShip = random.nextInt(100);
 		this.owner = null;
+		this.currentShipType = ShipType.XTWIN;
 	}
 	
 	public Planet(int nbShip, int shipRepop, int width, Point2D location, Player owner) {
@@ -79,6 +65,23 @@ public class Planet implements GalaxyItem{
 		this.owner = owner;
 		//shape = new Rectangle((Point)(location),new Dimension(width,width) );
 		over=false;
+		this.currentShipType = ShipType.TIGHTFIGHTER;
+	}
+	public void startProduction() {
+		if(owner!=null)
+			this.nbShip += shipRepop/60;
+	}
+	
+	public void setOver() {
+		if(Player.getHumanPlayer()==owner) {
+			if(!over)
+				SoundEffect.playMouseOver();
+			over = true;
+		}
+	}
+	
+	public void setEndOver() {
+		over = false;
 	}
 	
 	public void setNbShip(int nb) {
@@ -232,7 +235,7 @@ public class Planet implements GalaxyItem{
 		// Pensez à mesurer le timer ideal!
 		
 		Squadron squadron = new Squadron(this, p, owner);
-		SquadronUnleasher squadronUnleasher = new SquadronUnleasher(number, squadron, itemList);
+		SquadronUnleasher squadronUnleasher = new SquadronUnleasher(number,currentShipType, squadron, itemList);
 		squadronList.add(squadronUnleasher);
 		
 		Application.timer(400, new SquadronUnleasherTimer(squadronUnleasher));

@@ -20,22 +20,26 @@ public class GameCore implements ApplicationRunnable<GalaxyItem> {
 		 * This is our MouseHandler that will be called by the Arena in case of
 		 * mouse events
 		 */
-		MouseHandler<GalaxyItem> mouseHandler = new MouseManager();
+		
 		/*
 		 * We build the graphical interface by adding the graphical component
 		 * corresponding to the Arena - by calling createComponent - to a
 		 * JFrame.
 		 */
+		
 		final JFrame frame = new JFrame("~ GaLaxIR ~");
+		MainFrame m = new MainFrame("~ GaLaxIR ~",arena);
+		
 		/*
 		 * This is our KeyHandler that will be called by the Arena in case of
 		 * key events
 		 */
+		MouseHandler<GalaxyItem> mouseHandler = new MouseManager();
 		final KeyHandler keyHandler = new KeyManager(frame);
 		frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 		frame.add(arena.createComponent(640, 500, mouseHandler, keyHandler));
 		frame.pack();
-		frame.setVisible(true);
+		//frame.setVisible(true);
 		/*
 		 * We initially draw the component
 		 */

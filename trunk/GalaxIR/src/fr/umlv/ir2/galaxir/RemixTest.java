@@ -3,6 +3,7 @@ package fr.umlv.ir2.galaxir;
 
 import java.awt.Color;
 import java.awt.Point;
+import java.awt.geom.Point2D;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -31,6 +32,7 @@ public class RemixTest {
 		Random random = new Random();
 		testItemList.add(new Planet(100,50,100,new Point(random.nextInt(640),random.nextInt(480)), p));
 		testItemList.add(new Planet(100,50,100,new Point(random.nextInt(640),random.nextInt(480)), p2));
+		
 		for (int i = 1; i <= 10; i++) {
 			testItemList.add(new Planet(testItemList));
 		}
