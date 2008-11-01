@@ -74,13 +74,12 @@ public class SoundEffect {
 	public static void playMouseClick() {
 		try {
 			String filename = "/home/jordane/music/galaxir/mousedown.wav";
-			System.out.println(filename);
 			File f = new File(filename);
 			AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(f);
 			AudioFormat format = audioInputStream.getFormat();
 			DataLine.Info info = new DataLine.Info(Clip.class, format);
-			Clip clip = (Clip) AudioSystem.getLine(info);
-			clip.open(audioInputStream);        
+			Clip clip = (Clip)AudioSystem.getLine(info);
+			clip.open(audioInputStream);
 			clip.start();
 		} catch ( Exception e ) {
 			//e.printStackTrace();
