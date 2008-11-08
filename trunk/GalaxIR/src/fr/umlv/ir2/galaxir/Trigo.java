@@ -35,6 +35,5 @@ public class Trigo {
 		double angle = Math.acos(product);
 		return angle;
 	}
-	
-	
+
 }

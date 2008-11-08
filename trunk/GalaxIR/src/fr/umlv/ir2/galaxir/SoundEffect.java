@@ -1,7 +1,6 @@
 package fr.umlv.ir2.galaxir;
 
 import java.io.File;
-import java.sql.Time;
 import java.util.Calendar;
 import java.util.Random;
 
@@ -19,30 +18,9 @@ public class SoundEffect {
 	static Clip clip = null;
 	static Calendar previousCalendar = Calendar.getInstance();
 	
-	public static void playExplosion() {
-		try {
-			if(audioInputStream==null) {
-				f = new File("/home/jordane/Music/explo01.wav");
-				audioInputStream = AudioSystem.getAudioInputStream(f);
-				format = audioInputStream.getFormat();
-				info = new DataLine.Info(Clip.class, format);
-				clip = (Clip) AudioSystem.getLine(info);
-				clip.open(audioInputStream);      
-			}       
-			else {
-				clip.setFramePosition(0);
-			}
-			clip.start();
-		} catch ( Exception e ) {
-			e.printStackTrace();
-		}
-	}
-	
 	public static void playGogogo() {
 		try {
-			//Random r = new Random();
-			//String filename = "/home/jordane/music/galaxir/gogogo/gogogo"+r.nextInt(3)+".wav";
-			String filename = "/home/jordane/music/galaxir/gogogo/attack.wav";
+			String filename = "sounds/attack.wav";
 			File f = new File(filename);
 			AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(f);
 			AudioFormat format = audioInputStream.getFormat();
@@ -57,8 +35,7 @@ public class SoundEffect {
 	
 	public static void playMouseOver() {
 		try {
-			String filename = "/home/jordane/music/galaxir/mouseover.wav";
-			System.out.println(filename);
+			String filename = "sounds/mouseover.wav";
 			File f = new File(filename);
 			AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(f);
 			AudioFormat format = audioInputStream.getFormat();
@@ -73,7 +50,7 @@ public class SoundEffect {
 	
 	public static void playMouseClick() {
 		try {
-			String filename = "/home/jordane/music/galaxir/mousedown.wav";
+			String filename = "sounds/mousedown.wav";
 			File f = new File(filename);
 			AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(f);
 			AudioFormat format = audioInputStream.getFormat();
@@ -98,7 +75,7 @@ public class SoundEffect {
 		
 		try {
 			Random r = new Random();
-			String filename = "/home/jordane/music/galaxir/laser/laser"+r.nextInt(2)+".wav";
+			String filename = "sounds/laser"+r.nextInt(2)+".wav";
 			File f = new File(filename);
 			AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(f);
 			AudioFormat format = audioInputStream.getFormat();

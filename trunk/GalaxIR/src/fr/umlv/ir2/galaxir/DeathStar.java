@@ -5,9 +5,12 @@ import java.awt.Graphics2D;
 import java.awt.geom.Point2D;
 
 public class DeathStar extends Ship {
-
+	private static final int attack = 10;
+	private static final int speed = 1;
+	private static final int size = 50;
+	
 	public DeathStar( Point2D.Double location,Planet destinationPlanet,Player owner) {
-		super(1, 3, 1, 50, location, destinationPlanet, owner);
+		super(attack, speed, size, location, destinationPlanet, owner);
 	}
 
 	@Override

@@ -3,16 +3,42 @@ import java.awt.Color;
 import java.util.ArrayList;
 
 public class Player{
+	
+	enum PlayerType {
+		HUMAN,COMPUTER;
+	}
+	
 	private static int serialId;
 	private final int playerId = serialId++;
 	private final Color mainColor;
 	private final Color auxColor;
 	private final String name;
-	private static Player humanPlayer;
-	private static Player ordiPlayer;
-	private ArrayList<GalaxyItem> galaxyItem;
-	private ArrayList<GalaxyItem> selectedItem = new ArrayList<GalaxyItem>();
+	private final PlayerType playerType;
+	private AuthoritativeItemManager authoritativeItemManager;
+	private ArrayList<ClickableItem> selectedItem = new ArrayList<ClickableItem>();
 	private int percentage = 50;
+	private Planet overedPlanet;
+	
+	public Player(String name, Color mainColor, PlayerType playerType, AuthoritativeItemManager authoritativeItemManager) {
+		this.name = name;
+		this.mainColor = mainColor;
+		int brighterIntColor = mainColor.getRGB();
+		this.auxColor = new Color(brighterIntColor+128);
+		this.playerType = playerType;
+		this.authoritativeItemManager = authoritativeItemManager;
+	}
+	
+	public PlayerType getPlayerType() {
+		return playerType;
+	}
+	
+	public Planet getOveredPlanet() {
+		return overedPlanet;
+	}
+	
+	public void setOveredPlanet(Planet planet) {
+		overedPlanet = planet;
+	}
 	
 	public void setPercentage(int percentage) {
 		if(percentage>100)
@@ -26,19 +52,14 @@ public class Player{
 		return percentage;
 	}
 	
-	
-	
-	public Player(String name, Color mainColor, Color auxColor, ArrayList<GalaxyItem> galaxyItem) {
-		this.name = name;
-		this.mainColor = mainColor;
-		this.auxColor = auxColor;
-		this.galaxyItem = galaxyItem;
+	public AuthoritativeItemManager getAuthoritativeItemManager() {
+		return authoritativeItemManager;
 	}
 	
 	public void addAnExplosion(Ship s) {
 		if(s.getOwner()!=s.getDestination().getOwner()) {
 			Explosion e = new Explosion((int)s.getLocation().getX(),(int)s.getLocation().getY());
-			galaxyItem.add(e);
+			authoritativeItemManager.addExplosion(e);
 		}
 	}
 	
@@ -52,51 +73,43 @@ public class Player{
 		return playerId;
 	}
 	
-	public void addSelectedItem(GalaxyItem gi) {
-		selectedItem.add(gi);
+	public void addSelectedItem(ClickableItem item) {
+		selectedItem.add(item);
 	}
 	
-	public void removeSelectedItem(GalaxyItem gi) {
-		selectedItem.remove(gi);
+	public void removeSelectedItem(ClickableItem item) {
+		selectedItem.remove(item);
 	}
 	
-	public boolean containsSelectedItem(GalaxyItem gi) {
-		return selectedItem.contains(gi);
+	public boolean containsSelectedItem(ClickableItem item) {
+		return selectedItem.contains(item);
 	}
 	
 	public void clearSelectedItem() {
-		for(GalaxyItem gi: selectedItem) {
-			gi.unselected(this);
+		for(ClickableItem item: selectedItem) {
+			item.unselected(this);
 		}
 		selectedItem.clear();
 	}
 	
-	public void launchShip(Planet p) {
+	public void launchShip(ClickableItem item) {
 		if(selectedItem.size()==0) {
 			return;
 		}
+		Planet planet = authoritativeItemManager.getPlanetFromClickableItem(item);
+		if(planet==null)
+			return;
+		
 		SoundEffect.playGogogo();
-		if(selectedItem.contains(p)) {
-			selectedItem.remove(p);
-			p.unselected(this);
+		if(selectedItem.contains(planet)) {
+			selectedItem.remove(planet);
+			planet.unselected(this);
 		}
 		
-		//ArrayList<Ship> escadron;
-		for(GalaxyItem currentItem: selectedItem) {
-			//escadron = currentPlanet.moveShipTowards(p, 50);
-			currentItem.moveShipTowards(p, 50, galaxyItem);
-			//for(Ship s: escadron) {
-			//	this.galaxyItem.add(s);
-			//}
+		for(ClickableItem currentItem: selectedItem) {
+			currentItem.moveShipTowards(planet, 50);
 		}
+		
 		this.clearSelectedItem();
-	}
-	
-	public static Player getHumanPlayer() {
-		return humanPlayer;
-	}
-	
-	public static void setHumanPlayer(Player player) {
-		Player.humanPlayer = player;
 	}
 }

@@ -3,10 +3,9 @@ package fr.umlv.ir2.galaxir;
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.geom.Point2D;
-import java.util.ArrayList;
 
 public class Background implements GalaxyItem {
-	private final Color backgroundColor;
+	private Color backgroundColor;
 	private final int width;
 	private final int height;
 	
@@ -14,6 +13,10 @@ public class Background implements GalaxyItem {
 		this.width = width;
 		this.height = height;
 		backgroundColor = color;
+	}
+	
+	public void setColor(Color color) {
+		this.backgroundColor = color;
 	}
 	
 	@Override
@@ -25,26 +28,6 @@ public class Background implements GalaxyItem {
 	public void draw(Graphics2D g) {
 		g.setColor(backgroundColor);
 		g.fillRect(0, 0, width, height);
-	}
-
-	@Override
-	public void selected(Player player) {
-	}
-	
-	@Override
-	public void unselected(Player player) {
-	}
-	
-	@Override
-	public void moveShipTowards(Planet p, int percentage, ArrayList<GalaxyItem> itemList) {
-	}
-	
-	@Override
-	public void selectAndAdd(Player player) {
-	}
-	
-	@Override
-	public void unselectAndRemove(Player player) {
 	}
 	
 

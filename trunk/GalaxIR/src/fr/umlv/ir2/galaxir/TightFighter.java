@@ -7,10 +7,12 @@ import java.awt.geom.AffineTransform;
 import java.awt.geom.Point2D;
 
 public class TightFighter extends Ship{
-private static final int size = 10;
+	private static final int attack = 2;
+	private static final int speed = 2;
+	private static final int size = 10;
 	
 	public TightFighter( Point2D.Double location,Planet destinationPlanet,Player owner) {
-		super(2, 1, 2, size, location, destinationPlanet, owner);
+		super(attack, speed, size, location, destinationPlanet, owner);
 	}
 
 	@Override

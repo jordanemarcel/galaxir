@@ -3,7 +3,6 @@ package fr.umlv.ir2.galaxir;
 import java.awt.Point;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Point2D;
-import java.util.ArrayList;
 
 import fr.umlv.ir2.galaxir.ShipFactory.ShipType;
 import fr.umlv.remix.TimerTask;
@@ -11,23 +10,23 @@ import fr.umlv.remix.TimerTask;
 public class SquadronUnleasher {
 	private int numberOfShip;
 	private Squadron squadron;
-	private ArrayList<GalaxyItem> itemList;
 	double angleOfRotation;
 	Point2D calibratedPoint;
 	Point2D.Double locationDouble;
 	private final ShipType shipType;
+	private AuthoritativeItemManager authoritativeItemManager;
 	
 	public int getNumberOfShip() {
 		return numberOfShip;
 	}
 	
-	public SquadronUnleasher(int numberOfShip,ShipType shipType, Squadron squadron, ArrayList<GalaxyItem> itemList) {
+	public SquadronUnleasher(int numberOfShip,ShipType shipType, Squadron squadron) {
 		this.numberOfShip = numberOfShip;
 		this.squadron = squadron;
 		squadron.setSquadronUnleasher(this);
-		this.itemList = itemList;
 		this.computeWhatINeed();
 		this.shipType = shipType;
+		this.authoritativeItemManager = squadron.getOwner().getAuthoritativeItemManager();
 	}
 	
 	public void setNumberOfShip(int number) {
@@ -64,7 +63,7 @@ public class SquadronUnleasher {
 		if(squadron.getSourcePlanet()==squadron.getDestinationPlanet()) {
 			timerTask.cancel();
 			double nbShip = squadron.getSourcePlanet().getNbShipDouble();
-			squadron.getSourcePlanet().setNbShip(nbShip + numberOfShip);
+			squadron.getSourcePlanet().setNbShipDouble(nbShip + numberOfShip);
 			numberOfShip = 0;
 			return;
 		}
@@ -76,7 +75,6 @@ public class SquadronUnleasher {
 		double startAngle = 0;
 		
 		for(int i=0;i<numberToCreate;i++) {
-			//Ship currentShip = new Xtwin(new Point2D.Double(currentPoint.getX()/100, currentPoint.getY()/100), squadron.getDestinationPlanet(), squadron.getOwner());
 			Ship currentShip = shipType.create(new Point2D.Double(currentPoint.getX()/100, currentPoint.getY()/100), squadron.getDestinationPlanet(), squadron.getOwner());
 			currentShip.setSquadron(squadron);
 			AffineTransform at = AffineTransform.getRotateInstance(startAngle, locationDouble.getX()*100, locationDouble.getY()*100);
@@ -88,7 +86,7 @@ public class SquadronUnleasher {
 				startAngle += angleOfRotation;
 			}
 			squadron.add(currentShip);
-			itemList.add(currentShip);
+			authoritativeItemManager.addShip(currentShip);
 		}
 		
 		numberOfShip -= numberToCreate;

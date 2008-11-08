@@ -1,6 +1,7 @@
 package fr.umlv.ir2.galaxir;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Toolkit;
@@ -8,6 +9,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 
 import javax.swing.JDialog;
 import javax.swing.JFileChooser;
@@ -19,10 +21,8 @@ import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.WindowConstants;
 
-import fr.umlv.galaxir.testClement.MapManager;
 import fr.umlv.remix.Arena;
 import fr.umlv.remix.KeyHandler;
-import fr.umlv.remix.MouseHandler;
 
 public class MainFrame{
 	
@@ -96,9 +96,14 @@ public class MainFrame{
 		public abstract void performed();
 		
 	}
+	
+	private String name;
+	private Arena<GalaxyItem> arena;
 	private final JPanel globalePanel;
 	private final JFrame frame;
-	public MainFrame(String name, Arena<GalaxyItem> arena){
+	
+	
+	public MainFrame(String name, Arena<GalaxyItem> arena, Player humanPlayer){
 		globalePanel = new JPanel();
 		globalePanel.setLayout(new BorderLayout());
 		frame = new JFrame(name);
@@ -125,9 +130,9 @@ public class MainFrame{
 
 		mainMenuBar.add(fileMenu);
 		globalePanel.add(mainMenuBar,BorderLayout.NORTH);
-		MouseHandler<GalaxyItem> mouseHandler = new MouseManager();
+		//MouseHandler<GalaxyItem> mouseHandler = new MouseManager(humanPlayer);
 		final KeyHandler keyHandler = new KeyManager(frame);
-		globalePanel.add(arena.createComponent(640, 500, mouseHandler, keyHandler));
+		//globalePanel.add(arena.createComponent(640, 500, mouseHandler, keyHandler));
 		/*
 		 * End : menu done! and put into the frame
 		 */
@@ -149,6 +154,6 @@ public class MainFrame{
         frame.pack();
        
         frame.setVisible(true);
-       /// frame.setResizable(false);
+        //frame.setResizable(false);
 	}
 }

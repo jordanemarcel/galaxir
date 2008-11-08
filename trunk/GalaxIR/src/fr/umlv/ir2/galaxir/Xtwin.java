@@ -7,20 +7,22 @@ import java.awt.geom.AffineTransform;
 import java.awt.geom.Point2D;
 
 public class Xtwin extends Ship {
+	private static final int attack = 1;
+	private static final int speed = 3;
 	private static final int size = 10;
 	
-	public Xtwin( Point2D.Double location,Planet destinationPlanet,Player owner) {
-		super(1, 2, 1, size, location, destinationPlanet, owner);
+	public Xtwin(Point2D.Double location,Planet destinationPlanet,Player owner) {
+		super(attack, speed, size, location, destinationPlanet, owner);
+	}
+	
+	public static double getStaticSize() {
+		return size;
 	}
 
 	@Override
 	public boolean contains(Point2D p) {
 		return p.distance(this.getLocation())<this.getRadius();
 	}	
-	
-	public static double getStaticSize() {
-		return size;
-	}
 	
 	@Override
 	public boolean intersects(Planet p) {
@@ -31,21 +33,25 @@ public class Xtwin extends Ship {
 	@Override
 	public void draw(Graphics2D g) {
 		Point2D pos = getLocation();
-        int x = (int)pos.getX(), y = (int)pos.getY(), w = this.getSize();
-        g.setColor(this.getOwner().getMainColor());
-        if(over)
-        	g.setColor(Color.white);
+        int x = (int)pos.getX();
+        int y = (int)pos.getY();
+        int size = this.getSize();
+        Color mainColor = this.getOwner().getMainColor();
+        g.setColor(mainColor);
+        if(over) {
+        	g.setColor(this.getOwner().getAuxColor());
+        }
         if(this.squadron.isSelected())
         	g.setColor(this.getOwner().getAuxColor());
         double rotation = this.getRotation();
         int[] tx = new int[3];
         int[] ty = new int[3];
         tx[0] = x;
-        ty[0] = y-w/2;
-        tx[1] = x-w/2;
-        ty[1] = y+w/2;
-        tx[2] = x+w/2;
-        ty[2] = y+w/2;
+        ty[0] = y-size/2;
+        tx[1] = x-size/2;
+        ty[1] = y+size/2;
+        tx[2] = x+size/2;
+        ty[2] = y+size/2;
         AffineTransform at = AffineTransform.getRotateInstance(rotation, x, y);
         for(int i=0;i<3;i++) {
         	Point2D p = new Point(tx[i], ty[i]);

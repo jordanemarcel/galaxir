@@ -2,73 +2,79 @@ package fr.umlv.ir2.galaxir;
 
 
 import java.util.ArrayList;
+import java.util.Iterator;
+
 import fr.umlv.remix.KeyPress;
 
 public class MouseManager implements fr.umlv.remix.MouseHandler<GalaxyItem> {
+	private AuthoritativeItemManager authoritativeItemManager;
 	ArrayList<GalaxyItem> overList = new ArrayList<GalaxyItem>();
-	
+	private Player humanPlayer;
+
+	public MouseManager(AuthoritativeItemManager authoritativeItemManager, Player humanPlayer) {
+		this.authoritativeItemManager = authoritativeItemManager;
+		this.humanPlayer = humanPlayer;
+	}
+
 	@Override
 	public void mouseClicked(ArrayList<GalaxyItem> arg0,KeyPress arg1) {
-		//System.out.println("Select " + arg0);
-		for(GalaxyItem testItem : arg0) {
-			//if(testItem instanceof Planet) {
-				if(arg1.equals(KeyPress.CRTL)) {
-					if(Player.getHumanPlayer().containsSelectedItem(testItem)) {
-						testItem.unselectAndRemove(Player.getHumanPlayer());
-					}
-					else {
-						testItem.selectAndAdd(Player.getHumanPlayer());
-					}
-				} else if(arg1.equals(KeyPress.SHIFT)) {
-					if(testItem instanceof Planet) {
-						Planet p = (Planet)testItem;
-						Player.getHumanPlayer().launchShip(p);
-					}
+		if(humanPlayer==null)
+			return;
+		Iterator<ClickableItem> iterator = authoritativeItemManager.clickableItemIterator(arg0);
+		while(iterator.hasNext()) {
+			ClickableItem item = iterator.next();
+			if(arg1.equals(KeyPress.CRTL)) {
+				if(humanPlayer.containsSelectedItem(item)) {
+					item.unselectAndRemove(humanPlayer);
 				}
 				else {
-					Player.getHumanPlayer().clearSelectedItem();
-					testItem.selectAndAdd(Player.getHumanPlayer());
+					item.selectAndAdd(humanPlayer);
 				}
-		//	}
+			} else if(arg1.equals(KeyPress.SHIFT)) {
+				humanPlayer.launchShip(item);
+			}
+			else {
+				humanPlayer.clearSelectedItem();
+				item.selectAndAdd(humanPlayer);
+			}
 		}
 	}        
 
-	/*
-	 * in case of mouse wheel move, we just print the set of TestItems
-	 * covered by the mouse when it appears, the key that was eventually
-	 * pressed among CTL, SHIFT, ALT-GR and the direction of the wheel
-	 * move (-1 or +1).
-	 */
 	@Override
 	public void mouseWheelMoved(ArrayList<GalaxyItem> arg0,	KeyPress arg1, int arg2) {
-		Player.getHumanPlayer().setPercentage(Player.getHumanPlayer().getPercentage() - arg2*5);
+		if(humanPlayer==null)
+			return;
+		humanPlayer.setPercentage(humanPlayer.getPercentage() - arg2*5);
 	}
 
 	@Override
 	public void mouseDrag(ArrayList<GalaxyItem> itemsDrag, KeyPress key) {
-		for(GalaxyItem testItem : itemsDrag) {
-			
-				if(!Player.getHumanPlayer().containsSelectedItem(testItem)) {
-					testItem.selectAndAdd(Player.getHumanPlayer());
-				}
-			
+		if(humanPlayer==null)
+			return;
+		
+		Iterator<ClickableItem> iterator = authoritativeItemManager.clickableItemIterator(itemsDrag);
+		while(iterator.hasNext()) {
+			ClickableItem clickableItem = iterator.next();
+			if(!humanPlayer.containsSelectedItem(clickableItem)) {
+				clickableItem.selectAndAdd(humanPlayer);
+			}
 		}
 	}
-	
+
 	@Override
 	public void mouseDragging(ArrayList<GalaxyItem> itemsDragging,
 			KeyPress key) {
-		if(!itemsDragging.isEmpty())
-			System.out.println("Dragging :"+itemsDragging);
 
 	}
 
 	@Override
 	public void mouseDrop(ArrayList<GalaxyItem> itemsDrop, KeyPress key) {
+		if(humanPlayer==null)
+			return;
 		for(GalaxyItem testItem : itemsDrop) {
 			if(testItem instanceof Planet) {
 				Planet p = (Planet)testItem;
-				Player.getHumanPlayer().launchShip(p);
+				humanPlayer.launchShip(p);
 			}
 		}    
 	}
@@ -86,6 +92,7 @@ public class MouseManager implements fr.umlv.remix.MouseHandler<GalaxyItem> {
 				if(!itemsOver.contains(gi)) {
 					Planet p = (Planet)gi;
 					p.setEndOver();
+					humanPlayer.setOveredPlanet(null);
 				}
 			}
 		}
@@ -101,9 +108,10 @@ public class MouseManager implements fr.umlv.remix.MouseHandler<GalaxyItem> {
 					overList.add(gi);
 					Planet p = (Planet)gi;
 					p.setOver();
+					humanPlayer.setOveredPlanet(p);
 				}
 			}
 		}
-		
+
 	}
 }
