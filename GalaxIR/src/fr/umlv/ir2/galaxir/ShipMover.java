@@ -1,7 +1,5 @@
 package fr.umlv.ir2.galaxir;
 
-
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.LinkedList;
 
@@ -41,7 +39,7 @@ public class ShipMover {
 		for(GalaxyItem item: itemToDelete) {
 			if(item instanceof Ship) {
 				Ship s = (Ship)item;
-				Player.getHumanPlayer().addAnExplosion(s);
+				s.getOwner().addAnExplosion(s);
 			}
 			itemList.remove(item);
 		}

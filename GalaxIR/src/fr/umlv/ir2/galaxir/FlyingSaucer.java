@@ -2,15 +2,15 @@ package fr.umlv.ir2.galaxir;
 
 import java.awt.Color;
 import java.awt.Graphics2D;
-import java.awt.Point;
-import java.awt.geom.AffineTransform;
 import java.awt.geom.Point2D;
 
 public class FlyingSaucer extends Ship {
-private static final int size = 10;
+	private static final int attack = 2;
+	private static final int speed = 2;
+	private static final int size = 10;
 	
 	public FlyingSaucer( Point2D.Double location,Planet destinationPlanet,Player owner) {
-		super(1, 2, 1, size, location, destinationPlanet, owner);
+		super(attack, speed, size, location, destinationPlanet, owner);
 	}
 
 	@Override
@@ -37,7 +37,6 @@ private static final int size = 10;
         	g.setColor(Color.white);
         if(this.squadron.isSelected())
         	g.setColor(this.getOwner().getAuxColor());
-        double rotation = this.getRotation();
         
         g.setColor(Color.white);
         g.fillOval(x-w/2, y-w/2, w, w);

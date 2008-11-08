@@ -3,14 +3,14 @@ package fr.umlv.ir2.galaxir;
 import java.awt.Point;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Point2D;
-import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.Random;
 
-public abstract class Ship implements GalaxyItem{
+import fr.umlv.ir2.galaxir.Player.PlayerType;
+
+public abstract class Ship implements ClickableItem {
 	private final int attack;
 	private final int speed;
-	private final int cost;
 	private final int size;
 	private final Player owner;
 	private Point2D.Double location;
@@ -25,9 +25,13 @@ public abstract class Ship implements GalaxyItem{
 	protected boolean selected = false;
 	
 	public void setOver() {
-		squadron.setOver();
-		for(Ship s: squadron.getShipList())
-			s.over = true;
+		if(this.getOwner()!=null) {
+			if(this.getOwner().getPlayerType()==PlayerType.HUMAN) {
+				squadron.setOver();
+				for(Ship s: squadron.getShipList())
+					s.over = true;
+			}
+		}
 	}
 	
 	public void setEndOver() {
@@ -40,11 +44,10 @@ public abstract class Ship implements GalaxyItem{
 		return getSize()/2;
 	}
 	
-	public Ship(int attack, int speed, int cost,int size, 
+	public Ship(int attack, int speed,int size, 
 			Point2D.Double location, Planet destination,Player owner) {
 		this.attack = attack;
 		this.speed = speed;
-		this.cost = cost; 
 		this.location = location;
 		this.size = size;
 		this.destinationPlanet = destination;
@@ -74,9 +77,6 @@ public abstract class Ship implements GalaxyItem{
 	}
 	public int getAttack() {
 		return attack;
-	}
-	public int getCost() {
-		return cost;
 	}
 	
 	public void delete() {
@@ -233,8 +233,9 @@ public abstract class Ship implements GalaxyItem{
 	public void moveShipTowards(Planet p) {
 		squadron.changeDestination(p);
 	}
-
-	public void moveShipTowards(Planet p, int percentage, ArrayList<GalaxyItem> itemList) {
+	
+	@Override
+	public void moveShipTowards(Planet p, int percentage) {
 		moveShipTowards(p);
 	}
 	

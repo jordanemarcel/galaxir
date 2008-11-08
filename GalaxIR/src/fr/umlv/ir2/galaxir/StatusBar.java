@@ -3,54 +3,41 @@ package fr.umlv.ir2.galaxir;
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.geom.Point2D;
-import java.util.ArrayList;
 
 public class StatusBar implements GalaxyItem {
+	private final int windowWidth;
+	private final int windowHeight;
+	private final int height = 20;
+	Player humanPlayer;
 
+	public StatusBar(int windowWidth, int windowHeight, Player humanPlayer) {
+		this.windowHeight = windowHeight;
+		this.windowWidth = windowWidth;
+		this.humanPlayer = humanPlayer;
+	}
+	
+	
 	@Override
 	public boolean contains(Point2D p) {
-		// TODO Auto-generated method stub
 		return false;
 	}
+	
+	
 
 	@Override
 	public void draw(Graphics2D g) {
-		g.setColor(Color.yellow);
-		g.fillRect(0, 480, 640, 500);
-		String s = new String(Player.getHumanPlayer().getPercentage()+"%");
-		g.setColor(Color.black);
-		g.drawString(s, 600, 495);
-	}
-
-	@Override
-	public void moveShipTowards(Planet p, int percentage,
-			ArrayList<GalaxyItem> itemList) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void selectAndAdd(Player player) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void selected(Player player) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void unselectAndRemove(Player player) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void unselected(Player player) {
-		// TODO Auto-generated method stub
-		
+		g.setColor(Color.gray);
+		g.fillRect(0, windowHeight, windowWidth, windowHeight+height);
+		if(humanPlayer.getOveredPlanet()!=null) {
+			String s = new String("Production: "+(int)humanPlayer.getOveredPlanet().getShipRepop());
+			g.setColor(Color.black);
+			g.drawString(s, 300, 495);
+		}
+		if(humanPlayer!=null) {
+			String s = new String(humanPlayer.getPercentage()+"%");
+			g.setColor(Color.black);
+			g.drawString(s, 600, 495);
+		}
 	}
 
 }
