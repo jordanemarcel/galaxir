@@ -21,6 +21,10 @@ public class Xtwin extends Ship {
 	public static double getStaticSize() {
 		return size;
 	}
+	
+	public static double getStaticSpeed() {
+		return speed;
+	}
 
 	@Override
 	public boolean contains(Point2D p) {

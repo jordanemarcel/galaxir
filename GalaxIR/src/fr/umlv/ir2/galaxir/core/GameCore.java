@@ -9,6 +9,7 @@ import java.util.Iterator;
 import java.util.Random;
 
 import javax.swing.JFrame;
+import javax.swing.JMenuBar;
 import javax.swing.WindowConstants;
 
 import fr.umlv.ir2.galaxir.ai.AITimer;
@@ -19,6 +20,7 @@ import fr.umlv.ir2.galaxir.items.Background;
 import fr.umlv.ir2.galaxir.items.GalaxyItem;
 import fr.umlv.ir2.galaxir.items.Planet;
 import fr.umlv.ir2.galaxir.items.StatusBar;
+import fr.umlv.ir2.galaxir.items.ship.ShipFactory;
 import fr.umlv.ir2.galaxir.items.ship.ShipMoverTimer;
 import fr.umlv.remix.Application;
 import fr.umlv.remix.ApplicationRunnable;
@@ -118,6 +120,7 @@ public class GameCore implements ApplicationRunnable<GalaxyItem> {
 		int x;
 		int y;
 		int maximumTry = 100;
+		int biggestShipSize = ShipFactory.getBiggestShipSize();
 		do {
 			x = random.nextInt(maximumX) + minimumX;
 			y = random.nextInt(maximumY) + minimumY;
@@ -126,7 +129,9 @@ public class GameCore implements ApplicationRunnable<GalaxyItem> {
 			while(planetIterator.hasNext()) {
 				Planet planet = planetIterator.next();
 				if(!intersect)
-					intersect = planet.intersects(new Point(x, y), planetSize);
+					intersect = planet.intersects(new Point(x, y), planetSize+biggestShipSize*3);
+				else
+					break;
 			}
 			maximumTry--;
 		} while (intersect && maximumTry >0);
@@ -153,17 +158,18 @@ public class GameCore implements ApplicationRunnable<GalaxyItem> {
 		MouseHandler<GalaxyItem> mouseHandler = new MouseManager(authoritativeItemManager, humanPlayer);
 		final KeyHandler keyHandler = new KeyManager(frame);
 		frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-		frame.add(arena.createComponent(640, 500, mouseHandler, keyHandler));
+		frame.add(arena.createComponent(width, height+20, mouseHandler, keyHandler));
 		frame.pack();
 		frame.setResizable(false);
-		frame.setVisible(true);
 		arena.refresh();
 		Application.timer(10, new RefreshTimer(arena));
-		Application.timer(40, new ShipMoverTimer(itemList));
-		Application.timer(500, new ProductionTurnTimer(itemList));
+		Application.timer(40, new ShipMoverTimer(authoritativeItemManager));
+		Application.timer(500, new ProductionTurnTimer(authoritativeItemManager));
+		Application.timer(1000, new GameStateTimer(authoritativeItemManager));
 		for(Player player: playerList) {
 			if(player.getPlayerType()==PlayerType.COMPUTER)
-				Application.timer(100, new AITimer(authoritativeItemManager, player));
+				Application.timer(1000, new AITimer(authoritativeItemManager, player));
 		}
+		frame.setVisible(true);
 	}
 }

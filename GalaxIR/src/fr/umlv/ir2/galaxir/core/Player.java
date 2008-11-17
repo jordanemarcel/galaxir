@@ -6,7 +6,6 @@ import fr.umlv.ir2.galaxir.items.ClickableItem;
 import fr.umlv.ir2.galaxir.items.Explosion;
 import fr.umlv.ir2.galaxir.items.Planet;
 import fr.umlv.ir2.galaxir.items.ship.Ship;
-import fr.umlv.ir2.galaxir.sounds.SoundEffect;
 
 public class Player{
 	
@@ -36,6 +35,11 @@ public class Player{
 	
 	public PlayerType getPlayerType() {
 		return playerType;
+	}
+	
+	@Override
+	public String toString() {
+		return name;
 	}
 	
 	public Planet getOveredPlanet() {
@@ -106,7 +110,6 @@ public class Player{
 		if(planet==null)
 			return;
 		
-		SoundEffect.playGogogo();
 		if(selectedItem.contains(planet)) {
 			selectedItem.remove(planet);
 			planet.unselected(this);

@@ -22,17 +22,12 @@ public class KeyManager implements KeyHandler{
 	@Override
 	public void keyTyped(char arg0) {            
 		switch (arg0) {
-		case '+':
-			System.out.println("+ has been typed");
-			break;
-		case '-':
-			System.out.println("- has been typed");
-			break;
 		default:
 			//do nothing
 			break;
 		}
 	}
+	
 	@Override
 	public JFrame getParentFrame() {
 		return frame;

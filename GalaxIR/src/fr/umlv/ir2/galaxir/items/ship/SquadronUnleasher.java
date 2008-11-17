@@ -6,7 +6,7 @@ import java.awt.geom.Point2D;
 
 import fr.umlv.ir2.galaxir.core.AuthoritativeItemManager;
 import fr.umlv.ir2.galaxir.items.ship.ShipFactory.ShipType;
-import fr.umlv.ir2.galaxir.utils.Trigo;
+import fr.umlv.ir2.galaxir.utils.Trigonometry;
 import fr.umlv.remix.TimerTask;
 
 public class SquadronUnleasher {
@@ -35,21 +35,27 @@ public class SquadronUnleasher {
 		numberOfShip = number;
 	}
 	
+	public AuthoritativeItemManager getAuthoritativeItemManager() {
+		return authoritativeItemManager;
+	}
+	
 	public void computeWhatINeed() {
 		locationDouble = new Point2D.Double(squadron.getSourcePlanet().getLocation().getX(), squadron.getSourcePlanet().getLocation().getY());
-		Point2D.Double top = Trigo.findUpperPoint(locationDouble);
+		Point2D.Double top = Trigonometry.findUpperPoint(locationDouble);
 		Point2D.Double destinationDouble = new Point2D.Double(squadron.getDestinationPlanet().getLocation().getX(), squadron.getDestinationPlanet().getLocation().getY());
-		double startAngle = Trigo.findAngle(locationDouble, top, destinationDouble);
+		double startAngle = Trigonometry.findAngle(locationDouble, top, destinationDouble);
 		if(locationDouble.getX()>destinationDouble.getX())
 			startAngle = -startAngle;
 		
+		double currentShipRadius = squadron.getSourcePlanet().getCurrentShipType().getSize()/2;
+		
 		double creationX = locationDouble.getX();
-		double creationY = locationDouble.getY() - squadron.getSourcePlanet().getRadius() - Xtwin.getStaticSize();
+		double creationY = locationDouble.getY() - squadron.getSourcePlanet().getRadius() - currentShipRadius;
 		
-		Point2D.Double leftPoint = new Point2D.Double(creationX - Xtwin.getStaticSize()/2, creationY);
-		Point2D.Double rightPoint = new Point2D.Double(creationX + Xtwin.getStaticSize()/2, creationY);
+		Point2D.Double leftPoint = new Point2D.Double(creationX - currentShipRadius, creationY);
+		Point2D.Double rightPoint = new Point2D.Double(creationX + currentShipRadius, creationY);
 		
-		angleOfRotation = Trigo.findAngle(locationDouble, leftPoint, rightPoint);
+		angleOfRotation = Trigonometry.findAngle(locationDouble, leftPoint, rightPoint);
 		
 		calibratedPoint = new Point((int)(creationX*100), (int)(creationY*100));
 		AffineTransform at = AffineTransform.getRotateInstance(startAngle, locationDouble.getX()*100, locationDouble.getY()*100);
@@ -63,10 +69,10 @@ public class SquadronUnleasher {
 	
 	public void run(TimerTask timerTask) {
 		if(squadron.getSourcePlanet()==squadron.getDestinationPlanet()) {
-			timerTask.cancel();
 			double nbShip = squadron.getSourcePlanet().getNbShipDouble();
 			squadron.getSourcePlanet().setNbShipDouble(nbShip + numberOfShip);
 			numberOfShip = 0;
+			timerTask.cancel();
 			return;
 		}
 		int numberToCreate = shipPerSubSquadron();
@@ -92,7 +98,7 @@ public class SquadronUnleasher {
 		}
 		
 		numberOfShip -= numberToCreate;
-		if(numberOfShip==numberToCreate)
+		if(numberOfShip<=0)
 			timerTask.cancel();
 	}
 
