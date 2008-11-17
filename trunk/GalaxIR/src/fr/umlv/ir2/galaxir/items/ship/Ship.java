@@ -3,7 +3,7 @@ package fr.umlv.ir2.galaxir.items.ship;
 import java.awt.Point;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Point2D;
-import java.util.LinkedList;
+import java.util.Iterator;
 import java.util.Random;
 
 import fr.umlv.ir2.galaxir.core.Player;
@@ -11,8 +11,7 @@ import fr.umlv.ir2.galaxir.core.Player.PlayerType;
 import fr.umlv.ir2.galaxir.items.ClickableItem;
 import fr.umlv.ir2.galaxir.items.GalaxyItem;
 import fr.umlv.ir2.galaxir.items.Planet;
-import fr.umlv.ir2.galaxir.sounds.SoundEffect;
-import fr.umlv.ir2.galaxir.utils.Trigo;
+import fr.umlv.ir2.galaxir.utils.Trigonometry;
 
 public abstract class Ship implements ClickableItem {
 	private final int attack;
@@ -25,10 +24,10 @@ public abstract class Ship implements ClickableItem {
 	private double angleWayTime = 0;
 	private double rotation = 0;
 	private GalaxyItem previous = null;
-	private boolean toBeDeleted = false;
 	protected Squadron squadron;
 	protected boolean over = false;
 	protected boolean selected = false;
+	private boolean toBeDeleted = false;
 	
 	public void setOver() {
 		if(this.getOwner()!=null) {
@@ -85,9 +84,6 @@ public abstract class Ship implements ClickableItem {
 		return attack;
 	}
 	
-	public void delete() {
-		this.toBeDeleted = true;
-	}
 	public boolean toBeDeleted() {
 		return this.toBeDeleted;
 	}
@@ -110,7 +106,7 @@ public abstract class Ship implements ClickableItem {
 		this.location = location;
 	}
 
-	public void move(LinkedList<Planet> planetList){
+	public void move(Iterator<Planet> planetIterator){
 		Point2D.Double destination = new Point2D.Double(destinationPlanet.getLocation().getX(),destinationPlanet.getLocation().getY());
 		double distance = location.distance(destination);
 		if(distance < speed)
@@ -141,10 +137,11 @@ public abstract class Ship implements ClickableItem {
 		boolean collision = true;
 		while(collision) {
 			collision = false;
-			for(Planet p: planetList) {
-				while(this.intersects(p)) {
-					if(p==destinationPlanet) {
-						this.attack(p);
+			while(planetIterator.hasNext()) {
+				Planet planet = planetIterator.next();
+				while(this.intersects(planet)) {
+					if(planet==destinationPlanet) {
+						this.attack(planet);
 						return;
 					}
 					collision = true;
@@ -157,7 +154,7 @@ public abstract class Ship implements ClickableItem {
 							angle = -farAngle;
 					} else if(angleWayTime>1) {
 						angle = 10 * angleWay;
-					} else if(angleWayTime==1 && previous!=p) {
+					} else if(angleWayTime==1 && previous!=planet) {
 						Random r = new Random();
 						boolean randomDirection = r.nextBoolean();
 						if(randomDirection)
@@ -173,7 +170,7 @@ public abstract class Ship implements ClickableItem {
 							angle = -farAngle;
 					}
 					
-					previous = p;
+					previous = planet;
 					
 					if(farAngle>=380) {
 						collision = false;
@@ -208,8 +205,8 @@ public abstract class Ship implements ClickableItem {
 			angleWay = 0;
 		}
 		setLocation(new Point.Double(nextX, nextY));
-		Point2D.Double top = Trigo.findUpperPoint(new Point2D.Double(centerX, centerY));
-		this.rotation = Trigo.findAngle(new Point2D.Double(centerX, centerY), top, new Point.Double(nextX, nextY));
+		Point2D.Double top = Trigonometry.findUpperPoint(new Point2D.Double(centerX, centerY));
+		this.rotation = Trigonometry.findAngle(new Point2D.Double(centerX, centerY), top, new Point.Double(nextX, nextY));
 		if(nextX<centerX)
 			this.rotation = -this.rotation;
 	}
@@ -251,7 +248,6 @@ public abstract class Ship implements ClickableItem {
 			lastShip = p.getNbShip() + this.getAttack();
 		else {
 			lastShip = p.getNbShip() - this.getAttack();
-			SoundEffect.playAttack();
 		}
 		
 		if(lastShip<=0) {
@@ -263,6 +259,7 @@ public abstract class Ship implements ClickableItem {
 			}
 		}
 		p.setNbShip(lastShip);
-		this.delete();
+		this.toBeDeleted = true;
 	}
+
 }

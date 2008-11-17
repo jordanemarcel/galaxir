@@ -13,6 +13,6 @@ public class AITimer implements TimerRunnable {
 	}
 	
 	public void run(TimerTask timerTask) {
-		brain.run();
+		brain.run(timerTask);
 	}
 }

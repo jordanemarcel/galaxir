@@ -2,7 +2,7 @@ package fr.umlv.ir2.galaxir.utils;
 
 import java.awt.geom.Point2D;
 
-public class Trigo {
+public class Trigonometry {
 
 	public static Point2D.Double findUpperPoint(Point2D.Double p) {
 		double x = p.getX();
@@ -25,11 +25,11 @@ public class Trigo {
 	}
 
 	public static double findAngle (Point2D.Double p1, Point2D.Double p2, Point2D.Double p3) {
-		double[] v0 = Trigo.createVector(p1, p2);
-		double[] v1 = Trigo.createVector(p1, p3);
-		double dotProduct = Trigo.scalarProduct(v0, v1);
-		double length1 = Trigo.vectorLength(v0);
-		double length2 = Trigo.vectorLength(v1);
+		double[] v0 = Trigonometry.createVector(p1, p2);
+		double[] v1 = Trigonometry.createVector(p1, p3);
+		double dotProduct = Trigonometry.scalarProduct(v0, v1);
+		double length1 = Trigonometry.vectorLength(v0);
+		double length2 = Trigonometry.vectorLength(v1);
 		double denominator = length1 * length2;
 		double product = denominator != 0.0 ? dotProduct / denominator : 0.0;
 		double angle = Math.acos(product);

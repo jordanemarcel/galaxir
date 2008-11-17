@@ -1,11 +1,13 @@
 package fr.umlv.ir2.galaxir.ai;
 
+import java.util.ArrayList;
 import java.util.Iterator;
 
 import fr.umlv.ir2.galaxir.core.AuthoritativeItemManager;
 import fr.umlv.ir2.galaxir.core.Player;
 import fr.umlv.ir2.galaxir.items.Planet;
 import fr.umlv.ir2.galaxir.items.ship.Ship;
+import fr.umlv.remix.TimerTask;
 
 
 public class Brain {
@@ -17,30 +19,92 @@ public class Brain {
 		this.player = p;
 	}
 
-	public void run() {
-		int min = Integer.MAX_VALUE;
-		Planet thisOne = null;
+	public int score(double growth, double distance, int attack, int defense) {
+		if(defense>attack)
+			return 0;
+		int attackRatio = getOptimalRatio(attack, defense);
+		int distanceRatio = (int)Math.round(100-(distance+1)*100/1000);
+		int score = attackRatio*distanceRatio*(int)growth;
+		return score;
+	}
+
+	public int getOptimalRatio(int attack, int defense) {
+		return (defense+1)*100/(attack+1);
+	}
+
+	public void run(TimerTask timerTask) {
+		int score = -1;
+		ArrayList<Planet> source = new ArrayList<Planet>();
+		Planet destination = null;
+		int ratio = 50;
+		boolean noMorePlanet = true;
+
 		Iterator<Planet> planetListIterator = authoritativeItemManager.planetIterator();
 		while(planetListIterator.hasNext()) {
 			Planet planet = planetListIterator.next();
-			if(planet.getNbShip()<min && planet.getOwner()!=player) {
-				min = planet.getNbShip();
-				thisOne = planet;
+			int currentScore = -1;
+			Planet bestPlanet = null;
+			Iterator<Planet> playerPlanetListIterator = authoritativeItemManager.planetIterator(player);
+			while(playerPlanetListIterator.hasNext()) {
+				noMorePlanet = false;
+				Planet playerPlanet = playerPlanetListIterator.next();
+				if(planet.getOwner()!=player) {
+					currentScore += score(planet.getShipRepop(), playerPlanet.getLocation().distance(planet.getLocation()), playerPlanet.getNbShip(), planet.getNbShip());
+					if(bestPlanet==null || bestPlanet.getNbShip()<playerPlanet.getNbShip()) {
+						bestPlanet = playerPlanet;
+					}
+				}
+			}
+			if(currentScore>score) {
+				score = currentScore;
+				source.add(bestPlanet);
+				destination = planet;
+				ratio = getOptimalRatio(bestPlanet.getNbShip(), planet.getNbShip());
+			}
+		}
+		if(noMorePlanet) {
+			Iterator<Ship> shipListIterator = authoritativeItemManager.shipIterator(player);
+			if(!shipListIterator.hasNext()) {
+				System.out.println("STOP: "+player);
+				timerTask.cancel();
+				return;
+			}
+		}
+		if(destination!=null && source.size()!=0 && score>0) {
+			for(Planet planetSource: source) {
+				planetSource.moveShipTowards(destination, ratio);
+			}
+		}
+		/*int value = Integer.MIN_VALUE;
+		Planet source = null;
+		Planet destination = null;
+		Iterator<Planet> planetListIterator = authoritativeItemManager.planetIterator(player);
+		while(planetListIterator.hasNext()) {
+			Planet planet = planetListIterator.next();
+			if(planet.getNbShip()>value) {
+				value = planet.getNbShip();
+				source = planet;
+			}
+		}
+		if(source==null) {
+			Iterator<Ship> shipListIterator = authoritativeItemManager.shipIterator(player);
+			if(!shipListIterator.hasNext()) {
+				System.out.println("STOP: "+player);
+				timerTask.cancel();
+				return;
 			}
 		}
 		planetListIterator = authoritativeItemManager.planetIterator();
+		value = Integer.MAX_VALUE;
 		while(planetListIterator.hasNext()) {
 			Planet planet = planetListIterator.next();
-			if(planet.getOwner()==player) {
-				planet.moveShipTowards(thisOne, 50);
+			if(planet.getNbShip()<value && planet.getOwner()!=player) {
+				value = planet.getNbShip();
+				destination = planet;
 			}
 		}
-		Iterator<Ship> shipListIterator = authoritativeItemManager.shipIterator();
-		while(shipListIterator.hasNext()) {
-			Ship ship = shipListIterator.next();
-			if(ship.getOwner()==player) {
-				ship.moveShipTowards(thisOne);
-			}
-		}
+		if(destination!=null && source!=null) {
+			source.moveShipTowards(destination, 50);
+		}*/
 	}
 }

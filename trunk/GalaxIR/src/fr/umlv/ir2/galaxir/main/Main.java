@@ -15,11 +15,14 @@ public class Main {
 
 	public static void main(String[] args) {
 		ArrayList<GalaxyItem> galaxyItem = new ArrayList<GalaxyItem>();
-		GameCore gameCore = new GameCore(640,480,galaxyItem);
+		GameCore gameCore = new GameCore(800,600,galaxyItem);
 		gameCore.setBackground(Color.black);
-		gameCore.addPlayer("Jordane", Color.yellow, PlayerType.HUMAN);
+		gameCore.addPlayer("Jordane", Color.yellow, PlayerType.COMPUTER);
 		gameCore.addPlayer("Skynet", Color.red, PlayerType.COMPUTER);
-		gameCore.addNeutralPlanets(5);
+		gameCore.addPlayer("BigBrother", Color.pink, PlayerType.COMPUTER);
+		gameCore.addPlayer("Clement", Color.blue, PlayerType.COMPUTER);
+		gameCore.addNeutralPlanets(20);
 		Application.run(galaxyItem, new GalaxyItemManager(), gameCore);
 	}
+	
 }

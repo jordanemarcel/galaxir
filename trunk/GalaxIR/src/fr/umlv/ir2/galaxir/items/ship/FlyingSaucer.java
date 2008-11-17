@@ -8,9 +8,9 @@ import fr.umlv.ir2.galaxir.core.Player;
 import fr.umlv.ir2.galaxir.items.Planet;
 
 public class FlyingSaucer extends Ship {
-	private static final int attack = 2;
-	private static final int speed = 2;
-	private static final int size = 10;
+	private static final int attack = 3;
+	private static final int speed = 1;
+	private static final int size = 20;
 	
 	public FlyingSaucer( Point2D.Double location,Planet destinationPlanet,Player owner) {
 		super(attack, speed, size, location, destinationPlanet, owner);
@@ -25,6 +25,10 @@ public class FlyingSaucer extends Ship {
 		return size;
 	}
 	
+	public static double getStaticSpeed() {
+		return speed;
+	}
+	
 	@Override
 	public boolean intersects(Planet p) {
 		double distance = p.getLocation().distance(this.getLocation());
@@ -36,31 +40,14 @@ public class FlyingSaucer extends Ship {
 		Point2D pos = getLocation();
         int x = (int)pos.getX(), y = (int)pos.getY(), w = this.getSize();
         g.setColor(this.getOwner().getMainColor());
+        
         if(over)
-        	g.setColor(Color.white);
+        	g.setColor(this.getOwner().getAuxColor());
         if(this.squadron.isSelected())
         	g.setColor(this.getOwner().getAuxColor());
         
-        g.setColor(Color.white);
         g.fillOval(x-w/2, y-w/2, w, w);
-        g.setColor(Color.red);
+        g.setColor(Color.gray);
         g.fillOval(x-w/4, y-w/4, w/2, w/2);
-        
-        /*int[] tx = new int[3];
-        int[] ty = new int[3];
-        tx[0] = x;
-        ty[0] = y-w/2;
-        tx[1] = x-w/2;
-        ty[1] = y+w/2;
-        tx[2] = x+w/2;
-        ty[2] = y+w/2;
-        AffineTransform at = AffineTransform.getRotateInstance(rotation, x, y);
-        for(int i=0;i<3;i++) {
-        	Point2D p = new Point(tx[i], ty[i]);
-        	Point2D np = at.transform(p, null);
-        	tx[i] = (int)np.getX();
-        	ty[i] = (int)np.getY();
-        }
-        g.fillPolygon(tx, ty, 3);*/
 	}
 }

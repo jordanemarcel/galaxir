@@ -5,13 +5,13 @@ import java.awt.Graphics2D;
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
 
+import fr.umlv.ir2.galaxir.core.AuthoritativeItemManager;
 import fr.umlv.ir2.galaxir.core.Player;
 import fr.umlv.ir2.galaxir.core.Player.PlayerType;
 import fr.umlv.ir2.galaxir.items.ship.Squadron;
 import fr.umlv.ir2.galaxir.items.ship.SquadronUnleasher;
 import fr.umlv.ir2.galaxir.items.ship.SquadronUnleasherTimer;
 import fr.umlv.ir2.galaxir.items.ship.ShipFactory.ShipType;
-import fr.umlv.ir2.galaxir.sounds.SoundEffect;
 import fr.umlv.remix.Application;
 
 
@@ -41,11 +41,42 @@ public class Planet implements ClickableItem {
 			this.nbShip += shipRepop/60;
 	}
 	
+	public ShipType getCurrentShipType() {
+		return currentShipType;
+	}
+	
+	public void nextCurrentShipType() {
+		ShipType[] shipType = ShipType.values();
+		for(int i=0;i<shipType.length;i++) {
+			if(currentShipType.equals(shipType[i])) {
+				i++;
+				if(i==shipType.length)
+					i = 0;
+				currentShipType = shipType[i];
+				break;
+			}
+		}
+	}
+	
+	public void previousCurrentShipType() {
+		ShipType[] shipType = ShipType.values();
+		for(int i=0;i<shipType.length;i++) {
+			if(currentShipType.equals(shipType[i])) {
+				i--;
+				if(i<0)
+					i = shipType.length-1;
+				currentShipType = shipType[i];
+				break;
+			}
+		}
+	}
+	
+	
+	
 	public void setOver() {
 		if(this.getOwner()!=null) {
 			if(this.getOwner().getPlayerType()==PlayerType.HUMAN) {
 				if(!over) {
-					SoundEffect.playMouseOver();
 					over = true;
 				}
 			}
@@ -147,7 +178,6 @@ public class Planet implements ClickableItem {
 		if(player==this.getOwner()) {
 			selected = true;
 			player.addSelectedItem(this);
-			SoundEffect.playMouseClick();
 		}
 	}
 	
@@ -155,7 +185,6 @@ public class Planet implements ClickableItem {
 		if(player==this.getOwner()) {
 			selected = false;
 			player.removeSelectedItem(this);
-			SoundEffect.playMouseClick();
 		}
 	}
 	
@@ -187,13 +216,13 @@ public class Planet implements ClickableItem {
 		int number = (int)Math.floor(nbShip * owner.getPercentage() / 100);
 		nbShip -= number;
 		
-		// Pensez à mesurer le timer ideal!
+		long timer = (long)(currentShipType.getSize()/currentShipType.getSpeed()*40);
 		
 		Squadron squadron = new Squadron(this, p, owner);
 		SquadronUnleasher squadronUnleasher = new SquadronUnleasher(number,currentShipType, squadron);
 		squadronList.add(squadronUnleasher);
 		
-		Application.timer(400, new SquadronUnleasherTimer(squadronUnleasher));
+		Application.timer(timer, new SquadronUnleasherTimer(squadronUnleasher));
 	}
 	
 }

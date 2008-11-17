@@ -12,7 +12,7 @@ import fr.umlv.ir2.galaxir.items.Planet;
 public class TightFighter extends Ship{
 	private static final int attack = 2;
 	private static final int speed = 2;
-	private static final int size = 10;
+	private static final int size = 15;
 	
 	public TightFighter( Point2D.Double location,Planet destinationPlanet,Player owner) {
 		super(attack, speed, size, location, destinationPlanet, owner);
@@ -25,6 +25,10 @@ public class TightFighter extends Ship{
 	
 	public static double getStaticSize() {
 		return size;
+	}
+	
+	public static double getStaticSpeed() {
+		return speed;
 	}
 	
 	@Override

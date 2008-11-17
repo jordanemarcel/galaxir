@@ -50,14 +50,26 @@ public class MouseManager implements fr.umlv.remix.MouseHandler<GalaxyItem> {
 	public void mouseWheelMoved(ArrayList<GalaxyItem> arg0,	KeyPress arg1, int arg2) {
 		if(humanPlayer==null)
 			return;
-		humanPlayer.setPercentage(humanPlayer.getPercentage() - arg2*5);
+		if(arg1 == KeyPress.SHIFT) {
+			Iterator<Planet> planetIterator = authoritativeItemManager.planetIterator(arg0);
+			while(planetIterator.hasNext()) {
+				Planet planet = planetIterator.next();
+				if(planet.getOwner()==humanPlayer) {
+					if(arg2<0)
+						planet.nextCurrentShipType();
+					else if(arg2>0)
+						planet.previousCurrentShipType();
+				}
+			}
+		} else {
+			humanPlayer.setPercentage(humanPlayer.getPercentage() - arg2*5);
+		}
 	}
 
 	@Override
 	public void mouseDrag(ArrayList<GalaxyItem> itemsDrag, KeyPress key) {
 		if(humanPlayer==null)
 			return;
-		
 		Iterator<ClickableItem> iterator = authoritativeItemManager.clickableItemIterator(itemsDrag);
 		while(iterator.hasNext()) {
 			ClickableItem clickableItem = iterator.next();
@@ -68,8 +80,7 @@ public class MouseManager implements fr.umlv.remix.MouseHandler<GalaxyItem> {
 	}
 
 	@Override
-	public void mouseDragging(ArrayList<GalaxyItem> itemsDragging,
-			KeyPress key) {
+	public void mouseDragging(ArrayList<GalaxyItem> itemsDragging, KeyPress key) {
 
 	}
 
@@ -77,47 +88,47 @@ public class MouseManager implements fr.umlv.remix.MouseHandler<GalaxyItem> {
 	public void mouseDrop(ArrayList<GalaxyItem> itemsDrop, KeyPress key) {
 		if(humanPlayer==null)
 			return;
-		for(GalaxyItem testItem : itemsDrop) {
-			if(testItem instanceof Planet) {
-				Planet p = (Planet)testItem;
-				humanPlayer.launchShip(p);
-			}
+		Iterator<Planet> iterator = authoritativeItemManager.planetIterator(itemsDrop);
+		while(iterator.hasNext()) {
+			Planet planet = iterator.next();
+			humanPlayer.launchShip(planet);
 		}    
 	}
 
 	@Override
 	public void mouseOver(ArrayList<GalaxyItem> itemsOver, KeyPress key) {
-		for(GalaxyItem gi: overList) {
-			if(gi instanceof Ship) {
-				if(!itemsOver.contains(gi)) {
-					Ship s = (Ship)gi;
-					s.setEndOver();
-				}
+		if(humanPlayer==null)
+			return;
+		Iterator<Planet> planetIterator = authoritativeItemManager.planetIterator(overList);
+		Iterator<Ship> shipIterator = authoritativeItemManager.shipIterator(overList);
+		while(shipIterator.hasNext()) {
+			Ship ship = shipIterator.next();
+			if(!itemsOver.contains(ship)) {
+				ship.setEndOver();
 			}
-			if(gi instanceof Planet) {
-				if(!itemsOver.contains(gi)) {
-					Planet p = (Planet)gi;
-					p.setEndOver();
-					humanPlayer.setOveredPlanet(null);
-				}
+		}
+		while(planetIterator.hasNext()) {
+			Planet planet = planetIterator.next();
+			if(!itemsOver.contains(planet)) {
+				planet.setEndOver();
+				humanPlayer.setOveredPlanet(null);
 			}
 		}
 		overList.clear();
 		if(!itemsOver.isEmpty()){
-			for(GalaxyItem gi: itemsOver) {
-				if(gi instanceof Ship) {
-					overList.add(gi);
-					Ship s = (Ship)gi;
-					s.setOver();
-				}
-				if(gi instanceof Planet) {
-					overList.add(gi);
-					Planet p = (Planet)gi;
-					p.setOver();
-					humanPlayer.setOveredPlanet(p);
-				}
+			shipIterator = authoritativeItemManager.shipIterator(itemsOver);
+			while(shipIterator.hasNext()) {
+				Ship ship = shipIterator.next();
+				overList.add(ship);
+				ship.setOver();
+			}
+			planetIterator = authoritativeItemManager.planetIterator(itemsOver);
+			while(planetIterator.hasNext()) {
+				Planet planet = planetIterator.next();
+				overList.add(planet);
+				planet.setOver();
+				humanPlayer.setOveredPlanet(planet);
 			}
 		}
-
 	}
 }

@@ -17,28 +17,34 @@ public class StatusBar implements GalaxyItem {
 		this.windowWidth = windowWidth;
 		this.humanPlayer = humanPlayer;
 	}
-	
-	
+
+
 	@Override
 	public boolean contains(Point2D p) {
 		return false;
 	}
-	
-	
+
+
 
 	@Override
 	public void draw(Graphics2D g) {
 		g.setColor(Color.gray);
 		g.fillRect(0, windowHeight, windowWidth, windowHeight+height);
 		if(humanPlayer.getOveredPlanet()!=null) {
-			String s = new String("Production: "+(int)humanPlayer.getOveredPlanet().getShipRepop());
+			if(humanPlayer.getOveredPlanet().getOwner()==humanPlayer) {
+				String type = new String("Ship Type: "+humanPlayer.getOveredPlanet().getCurrentShipType());
+				g.setColor(Color.black);
+				g.drawString(type, windowWidth/10, windowHeight+15);
+			}
+			String production = new String("Production: "+(int)humanPlayer.getOveredPlanet().getShipRepop());
 			g.setColor(Color.black);
-			g.drawString(s, 300, 495);
+			g.drawString(production, windowWidth/2, windowHeight+15);
+
 		}
 		if(humanPlayer!=null) {
 			String s = new String(humanPlayer.getPercentage()+"%");
 			g.setColor(Color.black);
-			g.drawString(s, 600, 495);
+			g.drawString(s, windowWidth-40, windowHeight+15);
 		}
 	}
 
