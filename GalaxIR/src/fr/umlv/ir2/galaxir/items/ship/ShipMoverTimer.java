@@ -13,6 +13,6 @@ public class ShipMoverTimer implements TimerRunnable {
 	}
 	
 	public void run(TimerTask timerTask) {
-		ms.run();
+		ms.run(timerTask);
     }
 }

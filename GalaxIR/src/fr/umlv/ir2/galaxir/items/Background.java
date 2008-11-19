@@ -30,6 +30,14 @@ public class Background implements GalaxyItem {
 		g.setColor(backgroundColor);
 		g.fillRect(0, 0, width, height);
 	}
+
+	public int getWidth() {
+		return width;
+	}
+
+	public int getHeight() {
+		return height;
+	}
 	
 
 }

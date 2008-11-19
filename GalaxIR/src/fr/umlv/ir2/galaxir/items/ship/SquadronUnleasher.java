@@ -68,6 +68,10 @@ public class SquadronUnleasher {
 	}
 	
 	public void run(TimerTask timerTask) {
+		if(!authoritativeItemManager.gameInProgress()) {
+			timerTask.cancel();
+			return;
+		}
 		if(squadron.getSourcePlanet()==squadron.getDestinationPlanet()) {
 			double nbShip = squadron.getSourcePlanet().getNbShipDouble();
 			squadron.getSourcePlanet().setNbShipDouble(nbShip + numberOfShip);

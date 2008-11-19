@@ -126,7 +126,7 @@ public class MouseManager implements fr.umlv.remix.MouseHandler<GalaxyItem> {
 			while(planetIterator.hasNext()) {
 				Planet planet = planetIterator.next();
 				overList.add(planet);
-				planet.setOver();
+				planet.setOver(humanPlayer);
 				humanPlayer.setOveredPlanet(planet);
 			}
 		}

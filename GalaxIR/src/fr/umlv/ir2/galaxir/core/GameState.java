@@ -43,7 +43,7 @@ public class GameState {
 					return;
 				}
 			}
-			System.out.println(currentPlayer+" is the winner!");
+			authoritativeItemManager.endGame(currentPlayer);
 			timerTask.cancel();
 		}
 	}

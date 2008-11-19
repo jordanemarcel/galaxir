@@ -1,5 +1,7 @@
 package fr.umlv.ir2.galaxir.core;
 
+import java.util.ArrayList;
+
 import fr.umlv.remix.TimerRunnable;
 import fr.umlv.remix.TimerTask;
 

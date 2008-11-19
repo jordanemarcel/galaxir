@@ -43,13 +43,14 @@ public class Xtwin extends Ship {
         int x = (int)pos.getX();
         int y = (int)pos.getY();
         int size = this.getSize();
+        
+        if(over || this.squadron.isSelected()) {
+        	g.setColor(Color.white);
+        	g.drawOval(x-size/2, y-size/2, size, size);
+        }
+        
         Color mainColor = this.getOwner().getMainColor();
         g.setColor(mainColor);
-        if(over) {
-        	g.setColor(this.getOwner().getAuxColor());
-        }
-        if(this.squadron.isSelected())
-        	g.setColor(this.getOwner().getAuxColor());
         double rotation = this.getRotation();
         int[] tx = new int[3];
         int[] ty = new int[3];

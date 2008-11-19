@@ -33,12 +33,17 @@ public class Brain {
 	}
 
 	public void run(TimerTask timerTask) {
+		if(!authoritativeItemManager.gameInProgress()) {
+			timerTask.cancel();
+			return;
+		}
+		
 		int score = -1;
 		ArrayList<Planet> source = new ArrayList<Planet>();
 		Planet destination = null;
 		int ratio = 50;
 		boolean noMorePlanet = true;
-
+		
 		Iterator<Planet> planetListIterator = authoritativeItemManager.planetIterator();
 		while(planetListIterator.hasNext()) {
 			Planet planet = planetListIterator.next();
@@ -65,7 +70,6 @@ public class Brain {
 		if(noMorePlanet) {
 			Iterator<Ship> shipListIterator = authoritativeItemManager.shipIterator(player);
 			if(!shipListIterator.hasNext()) {
-				System.out.println("STOP: "+player);
 				timerTask.cancel();
 				return;
 			}
@@ -75,36 +79,5 @@ public class Brain {
 				planetSource.moveShipTowards(destination, ratio);
 			}
 		}
-		/*int value = Integer.MIN_VALUE;
-		Planet source = null;
-		Planet destination = null;
-		Iterator<Planet> planetListIterator = authoritativeItemManager.planetIterator(player);
-		while(planetListIterator.hasNext()) {
-			Planet planet = planetListIterator.next();
-			if(planet.getNbShip()>value) {
-				value = planet.getNbShip();
-				source = planet;
-			}
-		}
-		if(source==null) {
-			Iterator<Ship> shipListIterator = authoritativeItemManager.shipIterator(player);
-			if(!shipListIterator.hasNext()) {
-				System.out.println("STOP: "+player);
-				timerTask.cancel();
-				return;
-			}
-		}
-		planetListIterator = authoritativeItemManager.planetIterator();
-		value = Integer.MAX_VALUE;
-		while(planetListIterator.hasNext()) {
-			Planet planet = planetListIterator.next();
-			if(planet.getNbShip()<value && planet.getOwner()!=player) {
-				value = planet.getNbShip();
-				destination = planet;
-			}
-		}
-		if(destination!=null && source!=null) {
-			source.moveShipTowards(destination, 50);
-		}*/
 	}
 }

@@ -1,5 +1,6 @@
 package fr.umlv.ir2.galaxir.core;
 
+import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Point;
 import java.awt.geom.Point2D;
@@ -9,7 +10,6 @@ import java.util.Iterator;
 import java.util.Random;
 
 import javax.swing.JFrame;
-import javax.swing.JMenuBar;
 import javax.swing.WindowConstants;
 
 import fr.umlv.ir2.galaxir.ai.AITimer;
@@ -37,6 +37,7 @@ public class GameCore implements ApplicationRunnable<GalaxyItem> {
 	private int playerPlanetSize = 100;
 	private int playerPlanetGrowth = 100;
 	private AuthoritativeItemManager authoritativeItemManager;
+	private int neutralPlanet = 20;
 	ArrayList<Player> playerList = new ArrayList<Player>();
 	
 	public GameCore(ArrayList<GalaxyItem> galaxyItem) {
@@ -77,6 +78,10 @@ public class GameCore implements ApplicationRunnable<GalaxyItem> {
 		this.playerPlanetSize = planetSize;
 	}
 	
+	public void setNeutralPlanet(int number) {
+		this.neutralPlanet = number;
+	}
+	
 	private void addStatusBar(Player humanPlayer) {
 		StatusBar statusBar = new StatusBar(width, height, humanPlayer);
 		authoritativeItemManager.addStatusBar(statusBar);
@@ -94,7 +99,7 @@ public class GameCore implements ApplicationRunnable<GalaxyItem> {
 		}
 	}
 	
-	public void addNeutralPlanets(int planetNumber) {
+	private void addNeutralPlanets(int planetNumber) {
 		Random r = new Random();
 		for(int i=0;i<planetNumber;i++) {
 			try {
@@ -154,13 +159,18 @@ public class GameCore implements ApplicationRunnable<GalaxyItem> {
 				break;
 			}
 		}
+
 		final JFrame frame = new JFrame("~ GaLaxIR ~");
+	
 		MouseHandler<GalaxyItem> mouseHandler = new MouseManager(authoritativeItemManager, humanPlayer);
 		final KeyHandler keyHandler = new KeyManager(frame);
 		frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-		frame.add(arena.createComponent(width, height+20, mouseHandler, keyHandler));
-		frame.pack();
+		frame.add(arena.createComponent(width, height+20, mouseHandler, keyHandler), BorderLayout.SOUTH);
 		frame.setResizable(false);
+		
+		addNeutralPlanets(neutralPlanet);
+		
+		frame.pack();
 		arena.refresh();
 		Application.timer(10, new RefreshTimer(arena));
 		Application.timer(40, new ShipMoverTimer(authoritativeItemManager));

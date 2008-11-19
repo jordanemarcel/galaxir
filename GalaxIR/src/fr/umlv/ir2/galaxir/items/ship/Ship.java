@@ -253,6 +253,8 @@ public abstract class Ship implements ClickableItem {
 		if(lastShip<=0) {
 			if(!p.callReinforcement()) {
 				lastShip = 0;
+				if(p.getOwner()!=null)
+					p.unselectAndRemove(p.getOwner());
 				p.setOwner(this.getOwner());
 			} else {
 				lastShip = p.getNbShip();
