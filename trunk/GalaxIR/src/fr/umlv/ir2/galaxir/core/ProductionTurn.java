@@ -8,8 +8,10 @@ import fr.umlv.remix.TimerTask;
 
 public class ProductionTurn {
 	private final LinkedList<Planet> planetList;
+	private final AuthoritativeItemManager authoritativeItemManager;
 	
 	public ProductionTurn(AuthoritativeItemManager authoritativeItemManager) {
+		this.authoritativeItemManager = authoritativeItemManager;
 		this.planetList = new LinkedList<Planet>();
 		Iterator<Planet> planetIterator = authoritativeItemManager.planetIterator();
 		while(planetIterator.hasNext()) {
@@ -18,6 +20,10 @@ public class ProductionTurn {
 	}
 	
 	public void run(TimerTask timerTask) {
+		if(!authoritativeItemManager.gameInProgress()) {
+			timerTask.cancel();
+			return;
+		}
 		for(Planet planet: planetList) {
 			planet.startProduction();
 		}

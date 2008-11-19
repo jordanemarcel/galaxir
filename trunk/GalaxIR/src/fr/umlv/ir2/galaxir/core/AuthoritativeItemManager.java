@@ -6,6 +6,7 @@ import java.util.Iterator;
 
 import fr.umlv.ir2.galaxir.items.Background;
 import fr.umlv.ir2.galaxir.items.ClickableItem;
+import fr.umlv.ir2.galaxir.items.EndOfGame;
 import fr.umlv.ir2.galaxir.items.Explosion;
 import fr.umlv.ir2.galaxir.items.GalaxyItem;
 import fr.umlv.ir2.galaxir.items.Planet;
@@ -18,9 +19,15 @@ public class AuthoritativeItemManager {
 	private ArrayList<Ship> shipList = new ArrayList<Ship>();
 	private ArrayList<Explosion> explosionList = new ArrayList<Explosion>();
 	private Background background;
+	private boolean gameInProgress;
 
 	public AuthoritativeItemManager(ArrayList<GalaxyItem> galaxyItem) {
 		this.galaxyItem = galaxyItem;
+		this.gameInProgress = true;
+	}
+	
+	public boolean gameInProgress() {
+		return gameInProgress;
 	}
 
 	public void addPlanet(Planet planet) {
@@ -154,5 +161,24 @@ public class AuthoritativeItemManager {
 			}
 		}
 		return clickableItemList.iterator();
+	}
+	
+	public void endGame(Player player) {
+		gameInProgress = false;
+		galaxyItem.clear();
+		planetList.clear();
+		shipList.clear();
+		explosionList.clear();
+		galaxyItem.add(background);
+		galaxyItem.add(new EndOfGame(player, background.getWidth(), background.getHeight()));
+	}
+	
+	public void newGame() {
+		gameInProgress = true;
+		galaxyItem.clear();
+		planetList.clear();
+		shipList.clear();
+		explosionList.clear();
+		galaxyItem.add(background);
 	}
 }

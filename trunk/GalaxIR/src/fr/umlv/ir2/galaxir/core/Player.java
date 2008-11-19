@@ -1,6 +1,7 @@
 package fr.umlv.ir2.galaxir.core;
 import java.awt.Color;
 import java.util.ArrayList;
+import java.util.Iterator;
 
 import fr.umlv.ir2.galaxir.items.ClickableItem;
 import fr.umlv.ir2.galaxir.items.Explosion;
@@ -16,19 +17,17 @@ public class Player{
 	private static int serialId;
 	private final int playerId = serialId++;
 	private final Color mainColor;
-	private final Color auxColor;
 	private final String name;
 	private final PlayerType playerType;
 	private AuthoritativeItemManager authoritativeItemManager;
 	private ArrayList<ClickableItem> selectedItem = new ArrayList<ClickableItem>();
+	private ArrayList<Integer> scoreList = new ArrayList<Integer>();
 	private int percentage = 50;
 	private Planet overedPlanet;
 	
 	public Player(String name, Color mainColor, PlayerType playerType, AuthoritativeItemManager authoritativeItemManager) {
 		this.name = name;
 		this.mainColor = mainColor;
-		int brighterIntColor = mainColor.getRGB();
-		this.auxColor = new Color(brighterIntColor+128);
 		this.playerType = playerType;
 		this.authoritativeItemManager = authoritativeItemManager;
 	}
@@ -48,6 +47,19 @@ public class Player{
 	
 	public void setOveredPlanet(Planet planet) {
 		overedPlanet = planet;
+	}
+	
+	public ArrayList<Integer> getScore() {
+		return scoreList;
+	}
+	
+	public void setScore(int index) {
+		int score = 0;
+		Iterator<Planet> planetIterator = authoritativeItemManager.planetIterator(this);
+		while(planetIterator.hasNext()) {
+			score += planetIterator.next().getNbShip();
+		}
+		scoreList.add(index, score);
 	}
 	
 	public void setPercentage(int percentage) {
@@ -73,9 +85,6 @@ public class Player{
 		}
 	}
 	
-	public Color getAuxColor() {
-		return auxColor;
-	}
 	public Color getMainColor() {
 		return mainColor;
 	}

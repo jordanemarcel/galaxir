@@ -5,6 +5,7 @@ import java.util.LinkedList;
 
 import fr.umlv.ir2.galaxir.core.AuthoritativeItemManager;
 import fr.umlv.ir2.galaxir.items.Explosion;
+import fr.umlv.remix.TimerTask;
 
 public class ShipMover {
 	private final AuthoritativeItemManager authoritativeItemManager;
@@ -43,7 +44,11 @@ public class ShipMover {
 		}
 	}
 
-	public void run() {
+	public void run(TimerTask timerTask) {
+		if(!authoritativeItemManager.gameInProgress()) {
+			timerTask.cancel();
+			return;
+		}
 		update();
 		Iterator<Ship> shipIterator = authoritativeItemManager.shipIterator();
 		while(shipIterator.hasNext()) {

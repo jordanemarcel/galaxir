@@ -41,11 +41,12 @@ public class TightFighter extends Ship{
 	public void draw(Graphics2D g) {
 		Point2D pos = getLocation();
         int x = (int)pos.getX(), y = (int)pos.getY(), w = this.getSize();
-        g.setColor(this.getOwner().getMainColor());
-        if(over)
+        
+        if(over || this.squadron.isSelected()) {
         	g.setColor(Color.white);
-        if(this.squadron.isSelected())
-        	g.setColor(this.getOwner().getAuxColor());
+        	g.drawOval(x-size/2, y-size/2, size, size);
+        }
+        g.setColor(this.getOwner().getMainColor());
         double rotation = this.getRotation();
         int[] tx = new int[8];
         int[] ty = new int[8];
