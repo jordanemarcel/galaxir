@@ -8,11 +8,13 @@ import java.awt.geom.Point2D;
 
 import fr.umlv.ir2.galaxir.core.Player;
 import fr.umlv.ir2.galaxir.items.Planet;
+import fr.umlv.ir2.galaxir.items.ship.ShipFactory.ShipType;
 
 public class TightFighter extends Ship{
 	private static final int attack = 2;
 	private static final int speed = 2;
 	private static final int size = 15;
+	private final ShipType shipType = ShipType.TIGHTFIGHTER;
 	
 	public TightFighter( Point2D.Double location,Planet destinationPlanet,Player owner) {
 		super(attack, speed, size, location, destinationPlanet, owner);
@@ -29,6 +31,10 @@ public class TightFighter extends Ship{
 	
 	public static double getStaticSpeed() {
 		return speed;
+	}
+	
+	public ShipType getShipType() {
+		return shipType;
 	}
 	
 	@Override

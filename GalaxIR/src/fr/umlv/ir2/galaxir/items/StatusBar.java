@@ -9,7 +9,7 @@ import fr.umlv.ir2.galaxir.core.Player;
 public class StatusBar implements GalaxyItem {
 	private final int windowWidth;
 	private final int windowHeight;
-	private final int height = 20;
+	private static final int height = 20;
 	Player humanPlayer;
 
 	public StatusBar(int windowWidth, int windowHeight, Player humanPlayer) {
@@ -30,19 +30,19 @@ public class StatusBar implements GalaxyItem {
 	public void draw(Graphics2D g) {
 		g.setColor(Color.gray);
 		g.fillRect(0, windowHeight, windowWidth, windowHeight+height);
-		if(humanPlayer.getOveredPlanet()!=null) {
-			if(humanPlayer.getOveredPlanet().getOwner()==humanPlayer) {
-				String type = new String("Ship Type: "+humanPlayer.getOveredPlanet().getCurrentShipType());
-				g.setColor(Color.black);
-				g.drawString(type, windowWidth/10, windowHeight+15);
-			}
-			String production = new String("Production: "+(int)humanPlayer.getOveredPlanet().getShipRepop());
-			g.setColor(Color.black);
-			g.drawString(production, windowWidth/2, windowHeight+15);
-
-		}
 		if(humanPlayer!=null) {
-			String s = new String(humanPlayer.getPercentage()+"%");
+			if(humanPlayer.getOveredPlanet()!=null) {
+				if(humanPlayer.getOveredPlanet().getOwner()==humanPlayer) {
+					String type = "Ship Type: "+humanPlayer.getOveredPlanet().getCurrentShipType();
+					g.setColor(Color.black);
+					g.drawString(type, windowWidth/10, windowHeight+15);
+				}
+				String production = "Production: "+(int)humanPlayer.getOveredPlanet().getShipRepop();
+				g.setColor(Color.black);
+				g.drawString(production, windowWidth/2, windowHeight+15);
+
+			}
+			String s = humanPlayer.getPercentage()+"%";
 			g.setColor(Color.black);
 			g.drawString(s, windowWidth-40, windowHeight+15);
 		}

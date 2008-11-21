@@ -11,6 +11,7 @@ import fr.umlv.ir2.galaxir.core.Player.PlayerType;
 import fr.umlv.ir2.galaxir.items.ClickableItem;
 import fr.umlv.ir2.galaxir.items.GalaxyItem;
 import fr.umlv.ir2.galaxir.items.Planet;
+import fr.umlv.ir2.galaxir.items.ship.ShipFactory.ShipType;
 import fr.umlv.ir2.galaxir.utils.Trigonometry;
 
 public abstract class Ship implements ClickableItem {
@@ -101,6 +102,8 @@ public abstract class Ship implements ClickableItem {
 	}
 	
 	public abstract boolean intersects(Planet p);
+	
+	public abstract ShipType getShipType();
 
 	public void setLocation(Point2D.Double location){
 		this.location = location;
@@ -244,10 +247,12 @@ public abstract class Ship implements ClickableItem {
 	
 	public void attack(Planet p) {
 		int lastShip;
-		if(this.getOwner()==p.getOwner())
+		if(this.getOwner()==p.getOwner() && this.getShipType()==p.getCurrentShipType())
 			lastShip = p.getNbShip() + this.getAttack();
-		else {
+		else if(this.getOwner()!=p.getOwner()) {
 			lastShip = p.getNbShip() - this.getAttack();
+		} else {
+			lastShip = p.getNbShip();
 		}
 		
 		if(lastShip<=0) {
@@ -256,6 +261,7 @@ public abstract class Ship implements ClickableItem {
 				if(p.getOwner()!=null)
 					p.unselectAndRemove(p.getOwner());
 				p.setOwner(this.getOwner());
+				p.setShipType(this.getShipType());
 			} else {
 				lastShip = p.getNbShip();
 			}

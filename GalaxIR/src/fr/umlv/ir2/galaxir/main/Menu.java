@@ -61,7 +61,7 @@ public class Menu {
 			Options option = options.get(args[i]);
 			if(option==null) {
 				options.get("-h").run(i,args,null);
-				System.exit(0);
+				throw new RuntimeException();
 			} else {
 				int shift = option.run(i, args, optionsSaver);
 				i += shift;

@@ -9,14 +9,13 @@ import fr.umlv.ir2.galaxir.items.Planet;
 import fr.umlv.ir2.galaxir.items.ship.Ship;
 import fr.umlv.remix.TimerTask;
 
-
 public class Brain {
 	private AuthoritativeItemManager authoritativeItemManager;
 	private Player player;
 
-	public Brain(AuthoritativeItemManager authoritativeItemManager, Player p) {
+	public Brain(AuthoritativeItemManager authoritativeItemManager, Player player) {
 		this.authoritativeItemManager = authoritativeItemManager;
-		this.player = p;
+		this.player = player;
 	}
 
 	public int score(double growth, double distance, int attack, int defense) {

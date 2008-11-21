@@ -28,6 +28,7 @@ public class ShipMover {
 		}
 		for(Ship toDeleteShip: shipToBeDeleted) {
 			toDeleteShip.getOwner().addAnExplosion(toDeleteShip);
+			//authoritativeItemManager.addExplosion(toDeleteShip);
 			authoritativeItemManager.removeShip(toDeleteShip);
 		}
 

@@ -59,6 +59,7 @@ public class MouseManager implements fr.umlv.remix.MouseHandler<GalaxyItem> {
 						planet.nextCurrentShipType();
 					else if(arg2>0)
 						planet.previousCurrentShipType();
+					planet.killProduction();
 				}
 			}
 		} else {

@@ -2,7 +2,6 @@ package fr.umlv.ir2.galaxir.items.ship;
 
 import java.util.ArrayList;
 
-import fr.umlv.ir2.galaxir.core.AuthoritativeItemManager;
 import fr.umlv.ir2.galaxir.core.Player;
 import fr.umlv.ir2.galaxir.items.Planet;
 
