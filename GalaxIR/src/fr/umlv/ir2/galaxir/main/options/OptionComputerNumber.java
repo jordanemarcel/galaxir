@@ -1,6 +1,6 @@
 package fr.umlv.ir2.galaxir.main.options;
 
-public class OptionPlanet implements Options {
+public class OptionComputerNumber implements Options {
 
 	@Override
 	public int run(int index, String[] args, OptionSaver optionSaver) {
@@ -11,7 +11,7 @@ public class OptionPlanet implements Options {
 		if(number==null)
 			throw new IllegalArgumentException();
 		
-		optionSaver.setNeutralPlanet(number);
+		optionSaver.setComputerPlayerNumber(number);
 		return 1;
 	}
 

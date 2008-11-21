@@ -2,17 +2,15 @@ package fr.umlv.ir2.galaxir.main.options;
 
 import java.awt.Color;
 import java.util.HashMap;
-import java.util.Random;
 
-import fr.umlv.ir2.galaxir.core.GameCore;
 import fr.umlv.ir2.galaxir.core.Player.PlayerType;
+import fr.umlv.ir2.galaxir.utils.ColorTools;
 
 public class OptionPlayer implements Options {
 	private final HashMap<String, Color> colors = new HashMap<String, Color>();
 	private final HashMap<String, PlayerType> playerType = new HashMap<String, PlayerType>();
 
 	public OptionPlayer() {
-		colors.put("black", Color.black);
 		colors.put("yellow", Color.yellow);
 		colors.put("blue", Color.blue);
 		colors.put("cyan", Color.cyan);
@@ -25,37 +23,37 @@ public class OptionPlayer implements Options {
 		colors.put("pink", Color.pink);
 		colors.put("red", Color.red);
 		colors.put("white", Color.white);
+		colors.put("random", ColorTools.generateNotBlackRandomColor());
 		
 		playerType.put("human", PlayerType.HUMAN);
 		playerType.put("computer", PlayerType.COMPUTER);
 	}
 
 	@Override
-	public int run(int index, String[] args, GameCore gameCore) {
+	public int run(int index, String[] args, OptionSaver optionSaver) {
 		if(!(index+3<args.length))
 			throw new IllegalArgumentException();
 
 		String name = args[index+1];
 		
 		PlayerType type = getPlayerType(args[index+3]);
-		if(type==null) {
+		if(type==null)
 			throw new IllegalArgumentException();
-		}
 		
 		Color color = getColor(args[index+2]);
 		if(color==null) {
 			try {
 				color = Color.decode(args[index+2]);
+				if(ColorTools.getAverageRGB(color)<20) {
+					System.out.println("Color "+args[index+2]+" too dark.");
+					color = ColorTools.generateNotBlackRandomColor();
+					System.out.println("A random color has been generated.");
+				}
 			} catch(NumberFormatException nfe) {
-				if(!args[index+2].equals("random"))
-					throw new IllegalArgumentException();
-				Random rand = new Random();
-				String randomColor = ""+rand.nextInt(255*255*255);
-				color = Color.decode(randomColor);
+				throw new IllegalArgumentException();
 			}
 		}
-		
-		gameCore.addPlayer(name, color, type);
+		optionSaver.addPlayer(name, color, type);
 		return 3;
 	}
 
@@ -64,7 +62,9 @@ public class OptionPlayer implements Options {
 	}
 
 	private Color getColor(String color) {
-		return colors.get(color);
+		Color c = colors.get(color);
+		colors.put("random", ColorTools.generateNotBlackRandomColor());
+		return c;
 	}
 
 }

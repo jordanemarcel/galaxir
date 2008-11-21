@@ -1,6 +1,5 @@
 package fr.umlv.ir2.galaxir.core;
 
-import java.awt.Color;
 import java.util.ArrayList;
 import java.util.Iterator;
 
@@ -58,10 +57,6 @@ public class AuthoritativeItemManager {
 	public void addBackground(Background background) {
 		this.background = background;
 		galaxyItem.add(0, background);
-	}
-
-	public void setBackground(Color color) {
-		this.background.setColor(color);
 	}
 
 	public void addStatusBar(StatusBar statusBar) {

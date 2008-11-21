@@ -24,6 +24,8 @@ public class Player{
 	private ArrayList<Integer> scoreList = new ArrayList<Integer>();
 	private int percentage = 50;
 	private Planet overedPlanet;
+	private boolean screenPlayer = false;
+	public static Player DEFAULT_PLAYER = new Player("default", Color.white, PlayerType.COMPUTER,null);
 	
 	public Player(String name, Color mainColor, PlayerType playerType, AuthoritativeItemManager authoritativeItemManager) {
 		this.name = name;
@@ -39,6 +41,14 @@ public class Player{
 	@Override
 	public String toString() {
 		return name;
+	}
+	
+	public void setScreenPlayer(boolean bool) {
+		screenPlayer = bool;
+	}
+	
+	public boolean getScreenPlayer() {
+		return screenPlayer;
 	}
 	
 	public Planet getOveredPlanet() {
