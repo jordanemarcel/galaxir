@@ -7,8 +7,8 @@ import java.awt.geom.Point2D;
 
 public class Background implements GalaxyItem {
 	private Color backgroundColor;
-	private final int width;
-	private final int height;
+	private int width;
+	private int height;
 	
 	public Background(int width, int height, Color color) {
 		this.width = width;

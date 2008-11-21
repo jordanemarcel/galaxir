@@ -39,54 +39,57 @@ public class GameCore implements ApplicationRunnable<GalaxyItem> {
 	private AuthoritativeItemManager authoritativeItemManager;
 	private int neutralPlanet = 20;
 	ArrayList<Player> playerList = new ArrayList<Player>();
-	
+
 	public GameCore(ArrayList<GalaxyItem> galaxyItem) {
 		createGameCore(640,480,galaxyItem);
 	}
-	
+
 	public GameCore(int width, int height, ArrayList<GalaxyItem> galaxyItem) {
 		createGameCore(width,height,galaxyItem);
 	}
-	
+
 	private void createGameCore(int width, int height, ArrayList<GalaxyItem> galaxyItem) {
 		this.width = width;
 		this.height = height;
 		this.authoritativeItemManager = new AuthoritativeItemManager(galaxyItem);
-		this.authoritativeItemManager.addBackground(new Background(width, height, Color.black));
 	}
-	
+
+	public void setWidth(int width) {
+		this.width = width;
+	}
+
+	public void setHeight(int height) {
+		this.height = height;
+	}
+
 	public void setPlanetSizeLimits(int minimum, int maximum) {
 		if(minimum>maximum)
 			throw new IllegalArgumentException("minimum can't be superior than maximum.");
 		this.minimumPlanetSize = minimum;
 		this.maximumPlanetSize = maximum;
 	}
-	
-	public void setBackground(Color color) {
-		authoritativeItemManager.setBackground(color);
-	}
-	
+
 	public void setPlayerPlanetShipNumber(int shipNumber) {
 		this.playerPlanetShipNumber = shipNumber;
 	}
-	
+
 	public void setPlayerPlanetGrowth(int planetGrowth) {
 		this.playerPlanetGrowth = planetGrowth;
 	}
-	
+
 	public void setPlayerPlanetSize(int planetSize) {
 		this.playerPlanetSize = planetSize;
 	}
-	
+
 	public void setNeutralPlanet(int number) {
 		this.neutralPlanet = number;
 	}
-	
+
 	private void addStatusBar(Player humanPlayer) {
 		StatusBar statusBar = new StatusBar(width, height, humanPlayer);
 		authoritativeItemManager.addStatusBar(statusBar);
 	}
-	
+
 	public void addPlayer(String playerName, Color playerColor, PlayerType playerType) {
 		Player player = new Player(playerName,playerColor,playerType,authoritativeItemManager);
 		try {
@@ -95,10 +98,22 @@ public class GameCore implements ApplicationRunnable<GalaxyItem> {
 			authoritativeItemManager.addPlanet(planet);
 			playerList.add(player);
 		} catch (IllegalStateException ise) {
-			
+
 		}
 	}
+
+	public void addPlayer(String playerName, Color playerColor, PlayerType playerType, Planet source) {
+		Player player = new Player(playerName,playerColor,playerType,authoritativeItemManager);
+		//Planet planet = new Planet(playerPlanetShipNumber, playerPlanetGrowth, playerPlanetSize, planetLocation, player);
+		authoritativeItemManager.addPlanet(source);
+		source.setOwner(player);
+		playerList.add(player);
+	}
 	
+	public void addPlanet(Planet planet) {
+		authoritativeItemManager.addPlanet(planet);
+	}
+
 	private void addNeutralPlanets(int planetNumber) {
 		Random r = new Random();
 		for(int i=0;i<planetNumber;i++) {
@@ -110,11 +125,11 @@ public class GameCore implements ApplicationRunnable<GalaxyItem> {
 				Planet planet = new Planet(startingPopulation, planetGrowth, width, planetLocation, null);
 				authoritativeItemManager.addPlanet(planet);
 			} catch (IllegalStateException ise) {
-				
+
 			}
 		}
 	}
-	
+
 	public Point2D getEmptyPlanetLocation(int planetSize) {
 		Random random = new Random();
 		int minimumX = planetSize/2;
@@ -144,7 +159,7 @@ public class GameCore implements ApplicationRunnable<GalaxyItem> {
 			throw new IllegalStateException("Not enough space on the map to put a planet.");
 		return new Point(x, y);
 	}
-	
+
 	/*
 	 * This will be the instructions launch by the run method of Application
 	 * after creating the Arena arg0
@@ -156,20 +171,23 @@ public class GameCore implements ApplicationRunnable<GalaxyItem> {
 			if(player.getPlayerType()==PlayerType.HUMAN) {
 				humanPlayer = player;
 				addStatusBar(humanPlayer);
+				humanPlayer.setScreenPlayer(true);
 				break;
 			}
 		}
 
 		final JFrame frame = new JFrame("~ GaLaxIR ~");
-	
+
 		MouseHandler<GalaxyItem> mouseHandler = new MouseManager(authoritativeItemManager, humanPlayer);
 		final KeyHandler keyHandler = new KeyManager(frame);
 		frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 		frame.add(arena.createComponent(width, height+20, mouseHandler, keyHandler), BorderLayout.SOUTH);
 		frame.setResizable(false);
-		
+
+		authoritativeItemManager.addBackground(new Background(width, height, Color.black));
 		addNeutralPlanets(neutralPlanet);
-		
+
+
 		frame.pack();
 		arena.refresh();
 		Application.timer(10, new RefreshTimer(arena));

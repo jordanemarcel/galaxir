@@ -7,7 +7,6 @@ import java.awt.Graphics2D;
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
 
-import fr.umlv.ir2.galaxir.core.AuthoritativeItemManager;
 import fr.umlv.ir2.galaxir.core.Player;
 import fr.umlv.ir2.galaxir.core.Player.PlayerType;
 import fr.umlv.ir2.galaxir.items.ship.Squadron;
@@ -163,11 +162,6 @@ public class Planet implements ClickableItem {
 		else 
 			g.setColor(Color.white);
 
-		String s = new String(""+this.getNbShip());
-		g.setFont(new Font(Font.MONOSPACED, Font.BOLD, 10));
-		FontMetrics fm = g.getFontMetrics ();
-		g.drawString(s, (int)location.getX()-fm.stringWidth(s)/2, (int)location.getY());
-
 		int total = 0;
 		for( int i = 0; i<squadronList.size(); i++ ) {
 			SquadronUnleasher su = squadronList.get(i);
@@ -177,9 +171,25 @@ public class Planet implements ClickableItem {
 			}
 			total += shipLeft;
 		}
-		s = new String("+"+total);
-		if(total>0)
-			g.drawString(s, (int)location.getX()-5, (int)location.getY()+15);
+
+		boolean showStats = false;
+		if(owner==null)
+			showStats = true;
+		else
+			if(owner.getScreenPlayer())
+				showStats = true;
+
+		if(showStats) {
+			String s = new String(""+this.getNbShip());
+			g.setFont(new Font(Font.MONOSPACED, Font.BOLD, 10));
+			FontMetrics fm = g.getFontMetrics ();
+			g.drawString(s, (int)location.getX()-fm.stringWidth(s)/2, (int)location.getY());
+
+			s = new String("+"+total);
+			if(total>0)
+				g.drawString(s, (int)location.getX()-5, (int)location.getY()+15);
+		}
+
 	}
 
 	public int getTotalOfShip() {
