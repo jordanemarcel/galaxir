@@ -30,9 +30,15 @@ public class Brain {
 	public int getOptimalRatio(int attack, int defense) {
 		return (defense+1)*100/(attack+1);
 	}
+	
+	public int getPlanetShipNumber(Planet planet) {
+		if(planet.getOwner()==null)
+			return planet.getNbShip();
+		return -1;
+	}
 
 	public void run(TimerTask timerTask) {
-		if(!authoritativeItemManager.gameInProgress()) {
+		if(!this.authoritativeItemManager.gameInProgress()) {
 			timerTask.cancel();
 			return;
 		}
@@ -43,16 +49,16 @@ public class Brain {
 		int ratio = 50;
 		boolean noMorePlanet = true;
 		
-		Iterator<Planet> planetListIterator = authoritativeItemManager.planetIterator();
+		Iterator<Planet> planetListIterator = this.authoritativeItemManager.planetIterator();
 		while(planetListIterator.hasNext()) {
 			Planet planet = planetListIterator.next();
 			int currentScore = -1;
 			Planet bestPlanet = null;
-			Iterator<Planet> playerPlanetListIterator = authoritativeItemManager.planetIterator(player);
+			Iterator<Planet> playerPlanetListIterator = this.authoritativeItemManager.planetIterator(this.player);
 			while(playerPlanetListIterator.hasNext()) {
 				noMorePlanet = false;
 				Planet playerPlanet = playerPlanetListIterator.next();
-				if(planet.getOwner()!=player) {
+				if(planet.getOwner()!=this.player) {
 					currentScore += score(planet.getShipRepop(), playerPlanet.getLocation().distance(planet.getLocation()), playerPlanet.getNbShip(), planet.getNbShip());
 					if(bestPlanet==null || bestPlanet.getNbShip()<playerPlanet.getNbShip()) {
 						bestPlanet = playerPlanet;
@@ -67,7 +73,7 @@ public class Brain {
 			}
 		}
 		if(noMorePlanet) {
-			Iterator<Ship> shipListIterator = authoritativeItemManager.shipIterator(player);
+			Iterator<Ship> shipListIterator = this.authoritativeItemManager.shipIterator(this.player);
 			if(!shipListIterator.hasNext()) {
 				timerTask.cancel();
 				return;
