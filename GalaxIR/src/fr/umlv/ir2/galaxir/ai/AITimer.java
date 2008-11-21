@@ -29,6 +29,6 @@ public class AITimer implements TimerRunnable {
 	 */
 	@Override
 	public void run(TimerTask timerTask) {
-		brain.run(timerTask);
+		this.brain.run(timerTask);
 	}
 }
