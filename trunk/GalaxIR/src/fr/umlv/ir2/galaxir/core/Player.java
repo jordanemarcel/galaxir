@@ -25,7 +25,7 @@ public class Player{
 	private int percentage = 50;
 	private Planet overedPlanet;
 	private boolean screenPlayer = false;
-	public static Player DEFAULT_PLAYER = new Player("default", Color.white, PlayerType.COMPUTER,null);
+	public final static Player DEFAULT_PLAYER = new Player("default", Color.white, PlayerType.COMPUTER,null);
 	
 	public Player(String name, Color mainColor, PlayerType playerType, AuthoritativeItemManager authoritativeItemManager) {
 		this.name = name;

@@ -8,7 +8,6 @@ import java.awt.geom.Point2D;
 import java.util.ArrayList;
 
 import fr.umlv.ir2.galaxir.core.Player;
-import fr.umlv.ir2.galaxir.core.Player.PlayerType;
 import fr.umlv.ir2.galaxir.items.ship.Squadron;
 import fr.umlv.ir2.galaxir.items.ship.SquadronUnleasher;
 import fr.umlv.ir2.galaxir.items.ship.SquadronUnleasherTimer;
@@ -86,6 +85,14 @@ public class Planet implements ClickableItem {
 	public void setEndOver() {
 		over = false;
 	}
+	
+	public void killProduction() {
+		nbShip = 0;
+	}
+	
+	public void setShipType(ShipType shipType) {
+		currentShipType = shipType;
+	}
 
 	public void setNbShip(int nb) {
 		nbShip = nb;
@@ -126,7 +133,7 @@ public class Planet implements ClickableItem {
 	}
 
 	public boolean contains(Point2D p){
-		return location.distance(p)<=(getWidth()/2);
+		return location.distance(p)<=(getWidth()/(double)2);
 	}
 
 	public boolean intersectPlanet(Planet p){
@@ -180,12 +187,12 @@ public class Planet implements ClickableItem {
 				showStats = true;
 
 		if(showStats) {
-			String s = new String(""+this.getNbShip());
+			String s = ""+this.getNbShip();
 			g.setFont(new Font(Font.MONOSPACED, Font.BOLD, 10));
 			FontMetrics fm = g.getFontMetrics ();
 			g.drawString(s, (int)location.getX()-fm.stringWidth(s)/2, (int)location.getY());
 
-			s = new String("+"+total);
+			s = "+"+total;
 			if(total>0)
 				g.drawString(s, (int)location.getX()-5, (int)location.getY()+15);
 		}

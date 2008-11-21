@@ -125,7 +125,7 @@ public class GameCore implements ApplicationRunnable<GalaxyItem> {
 				Planet planet = new Planet(startingPopulation, planetGrowth, width, planetLocation, null);
 				authoritativeItemManager.addPlanet(planet);
 			} catch (IllegalStateException ise) {
-
+				//do nothing;
 			}
 		}
 	}
@@ -142,8 +142,12 @@ public class GameCore implements ApplicationRunnable<GalaxyItem> {
 		int maximumTry = 100;
 		int biggestShipSize = ShipFactory.getBiggestShipSize();
 		do {
-			x = random.nextInt(maximumX) + minimumX;
-			y = random.nextInt(maximumY) + minimumY;
+			try {
+				x = random.nextInt(maximumX) + minimumX;
+				y = random.nextInt(maximumY) + minimumY;
+			} catch(IllegalArgumentException iae) {
+				throw new IllegalStateException("The screen is too small.");
+			}
 			intersect = false;
 			Iterator<Planet> planetIterator = authoritativeItemManager.planetIterator();
 			while(planetIterator.hasNext()) {
@@ -170,12 +174,11 @@ public class GameCore implements ApplicationRunnable<GalaxyItem> {
 		for(Player player: playerList) {
 			if(player.getPlayerType()==PlayerType.HUMAN) {
 				humanPlayer = player;
-				addStatusBar(humanPlayer);
 				humanPlayer.setScreenPlayer(true);
 				break;
 			}
 		}
-
+		addStatusBar(humanPlayer);
 		final JFrame frame = new JFrame("~ GaLaxIR ~");
 
 		MouseHandler<GalaxyItem> mouseHandler = new MouseManager(authoritativeItemManager, humanPlayer);

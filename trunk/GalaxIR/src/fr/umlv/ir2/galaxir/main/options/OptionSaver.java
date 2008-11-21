@@ -7,14 +7,13 @@ import java.util.List;
 
 import fr.umlv.ir2.galaxir.core.GameCore;
 import fr.umlv.ir2.galaxir.core.MapManager;
-import fr.umlv.ir2.galaxir.core.Player;
 import fr.umlv.ir2.galaxir.core.Player.PlayerType;
 import fr.umlv.ir2.galaxir.items.Planet;
 import fr.umlv.ir2.galaxir.utils.ColorTools;
 
 public class OptionSaver {
 
-	private class PlayerInfo {
+	private static class PlayerInfo {
 		private final String name;
 		private final Color color;
 		private final PlayerType playerType;

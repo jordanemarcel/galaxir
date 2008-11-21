@@ -30,9 +30,9 @@ public class EndOfGame implements GalaxyItem {
 		g.setColor(Color.white);
 		String s;
 		if(this.player==null)
-			s = new String("The Galaxy is freaking empty!");
+			s = "The Galaxy is freaking empty!";
 		else
-			s = new String(this.player+" is the Ruler, the Master, the Emperor of the Galaxy.");
+			s = this.player+" is the Ruler, the Master, the Emperor of the Galaxy.";
 		g.setFont(new Font(Font.MONOSPACED, Font.BOLD, 10));
 		FontMetrics fm = g.getFontMetrics ();
 		g.drawString(s, width/2-fm.stringWidth(s)/2, height/2);

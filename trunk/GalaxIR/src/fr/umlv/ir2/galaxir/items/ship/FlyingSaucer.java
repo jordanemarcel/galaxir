@@ -6,11 +6,13 @@ import java.awt.geom.Point2D;
 
 import fr.umlv.ir2.galaxir.core.Player;
 import fr.umlv.ir2.galaxir.items.Planet;
+import fr.umlv.ir2.galaxir.items.ship.ShipFactory.ShipType;
 
 public class FlyingSaucer extends Ship {
 	private static final int attack = 3;
 	private static final int speed = 1;
 	private static final int size = 20;
+	private final ShipType shipType = ShipType.FLYINGSAUCER;
 	
 	public FlyingSaucer( Point2D.Double location,Planet destinationPlanet,Player owner) {
 		super(attack, speed, size, location, destinationPlanet, owner);
@@ -27,6 +29,10 @@ public class FlyingSaucer extends Ship {
 	
 	public static double getStaticSpeed() {
 		return speed;
+	}
+	
+	public ShipType getShipType() {
+		return shipType;
 	}
 	
 	@Override
