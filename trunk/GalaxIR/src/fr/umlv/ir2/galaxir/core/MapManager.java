@@ -4,8 +4,7 @@ package fr.umlv.ir2.galaxir.core;
 import java.awt.Point;
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.LinkedList;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -24,10 +23,10 @@ import fr.umlv.ir2.galaxir.items.Planet;
 public class MapManager {
 	private int width;
 	private int height;
-	private List<Planet> planetList;
+	private LinkedList<Planet> planetList;
 	
 	public MapManager() {
-		this.planetList = new ArrayList<Planet>();
+		this.planetList = new LinkedList<Planet>();
 	}
 	
 	public void load(File mapXml) throws IOException {
@@ -89,7 +88,7 @@ public class MapManager {
 		return height;
 	}
 	
-	public List<Planet> getPlanetList() {
+	public LinkedList<Planet> getPlanetList() {
 		return planetList;
 	}
 }

@@ -4,9 +4,9 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Point;
 import java.awt.geom.Point2D;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.Random;
 
 import javax.swing.JFrame;
@@ -38,17 +38,17 @@ public class GameCore implements ApplicationRunnable<GalaxyItem> {
 	private int playerPlanetGrowth = 100;
 	private AuthoritativeItemManager authoritativeItemManager;
 	private int neutralPlanet = 20;
-	ArrayList<Player> playerList = new ArrayList<Player>();
+	LinkedList<Player> playerList = new LinkedList<Player>();
 
-	public GameCore(ArrayList<GalaxyItem> galaxyItem) {
+	public GameCore(LinkedList<GalaxyItem> galaxyItem) {
 		createGameCore(640,480,galaxyItem);
 	}
 
-	public GameCore(int width, int height, ArrayList<GalaxyItem> galaxyItem) {
+	public GameCore(int width, int height, LinkedList<GalaxyItem> galaxyItem) {
 		createGameCore(width,height,galaxyItem);
 	}
 
-	private void createGameCore(int width, int height, ArrayList<GalaxyItem> galaxyItem) {
+	private void createGameCore(int width, int height, LinkedList<GalaxyItem> galaxyItem) {
 		this.width = width;
 		this.height = height;
 		this.authoritativeItemManager = new AuthoritativeItemManager(galaxyItem);

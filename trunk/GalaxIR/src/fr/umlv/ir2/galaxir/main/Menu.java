@@ -1,7 +1,7 @@
 package fr.umlv.ir2.galaxir.main;
 
-import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedList;
 
 import fr.umlv.ir2.galaxir.core.GalaxyItemManager;
 import fr.umlv.ir2.galaxir.core.GameCore;
@@ -19,11 +19,11 @@ import fr.umlv.remix.Application;
 public class Menu {
 	private final HashMap<String, Options> options;
 	private final GameCore gameCore;
-	private final ArrayList<GalaxyItem> itemList;
+	private final LinkedList<GalaxyItem> itemList;
 	private final OptionSaver optionsSaver;
 
 	public Menu() {
-		this.itemList = new ArrayList<GalaxyItem>();
+		this.itemList = new LinkedList<GalaxyItem>();
 		this.gameCore = new GameCore(this.itemList);
 		this.options = new HashMap<String, Options>();
 		this.optionsSaver = new OptionSaver();

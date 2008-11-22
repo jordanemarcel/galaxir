@@ -1,7 +1,8 @@
 package fr.umlv.ir2.galaxir.core;
 
-import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
 
 import fr.umlv.ir2.galaxir.items.Background;
 import fr.umlv.ir2.galaxir.items.ClickableItem;
@@ -13,14 +14,14 @@ import fr.umlv.ir2.galaxir.items.StatusBar;
 import fr.umlv.ir2.galaxir.items.ship.Ship;
 
 public class AuthoritativeItemManager {
-	private ArrayList<GalaxyItem> galaxyItem;
-	private ArrayList<Planet> planetList = new ArrayList<Planet>();
-	private ArrayList<Ship> shipList = new ArrayList<Ship>();
-	private ArrayList<Explosion> explosionList = new ArrayList<Explosion>();
+	private LinkedList<GalaxyItem> galaxyItem;
+	private LinkedList<Planet> planetList = new LinkedList<Planet>();
+	private LinkedList<Ship> shipList = new LinkedList<Ship>();
+	private LinkedList<Explosion> explosionList = new LinkedList<Explosion>();
 	private Background background;
 	private boolean gameInProgress;
 
-	public AuthoritativeItemManager(ArrayList<GalaxyItem> galaxyItem) {
+	public AuthoritativeItemManager(LinkedList<GalaxyItem> galaxyItem) {
 		this.galaxyItem = galaxyItem;
 		this.gameInProgress = true;
 	}
@@ -88,7 +89,7 @@ public class AuthoritativeItemManager {
 	}
 	
 	public Iterator<Planet> planetIterator(Player player) {
-		ArrayList<Planet> shipItemList = new ArrayList<Planet>();
+		LinkedList<Planet> shipItemList = new LinkedList<Planet>();
 		for(Planet planet: planetList) {
 			if(planet.getOwner()==player) {
 				shipItemList.add(planet);
@@ -97,8 +98,8 @@ public class AuthoritativeItemManager {
 		return shipItemList.iterator();
 	}
 
-	public Iterator<Planet> planetIterator(ArrayList<GalaxyItem> list) {
-		ArrayList<Planet> planetItemList = new ArrayList<Planet>();
+	public Iterator<Planet> planetIterator(List<GalaxyItem> list) {
+		LinkedList<Planet> planetItemList = new LinkedList<Planet>();
 		for(GalaxyItem galaxyItem: list) {
 			for(Planet planet: planetList) {
 				if(planet.equals(galaxyItem)) {
@@ -116,7 +117,7 @@ public class AuthoritativeItemManager {
 	}
 
 	public Iterator<Ship> shipIterator(Player player) {
-		ArrayList<Ship> shipItemList = new ArrayList<Ship>();
+		LinkedList<Ship> shipItemList = new LinkedList<Ship>();
 		for(Ship ship: shipList) {
 			if(ship.getOwner()==player) {
 				shipItemList.add(ship);
@@ -125,8 +126,8 @@ public class AuthoritativeItemManager {
 		return shipItemList.iterator();
 	}
 
-	public Iterator<Ship> shipIterator(ArrayList<GalaxyItem> list) {
-		ArrayList<Ship> shipItemList = new ArrayList<Ship>();
+	public Iterator<Ship> shipIterator(List<GalaxyItem> list) {
+		LinkedList<Ship> shipItemList = new LinkedList<Ship>();
 		for(GalaxyItem galaxyItem: list) {
 			for(Ship ship: shipList) {
 				if(ship.equals(galaxyItem)) {
@@ -138,8 +139,8 @@ public class AuthoritativeItemManager {
 		return shipItemList.iterator();
 	}
 
-	public Iterator<ClickableItem> clickableItemIterator(ArrayList<GalaxyItem> mouseList) {
-		ArrayList<ClickableItem> clickableItemList = new ArrayList<ClickableItem>();
+	public Iterator<ClickableItem> clickableItemIterator(List<GalaxyItem> mouseList) {
+		LinkedList<ClickableItem> clickableItemList = new LinkedList<ClickableItem>();
 		for(GalaxyItem galaxyItem: mouseList) {
 			for(Planet planet: planetList) {
 				if(planet.equals(galaxyItem)) {
