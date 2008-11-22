@@ -3,6 +3,7 @@ package fr.umlv.ir2.galaxir.input;
 
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.LinkedList;
 
 import fr.umlv.ir2.galaxir.core.AuthoritativeItemManager;
 import fr.umlv.ir2.galaxir.core.Player;
@@ -14,7 +15,7 @@ import fr.umlv.remix.KeyPress;
 
 public class MouseManager implements fr.umlv.remix.MouseHandler<GalaxyItem> {
 	private AuthoritativeItemManager authoritativeItemManager;
-	ArrayList<GalaxyItem> overList = new ArrayList<GalaxyItem>();
+	LinkedList<GalaxyItem> overList = new LinkedList<GalaxyItem>();
 	private Player humanPlayer;
 
 	public MouseManager(AuthoritativeItemManager authoritativeItemManager, Player humanPlayer) {

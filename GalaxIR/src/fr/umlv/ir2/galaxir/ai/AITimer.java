@@ -6,7 +6,7 @@ import fr.umlv.remix.TimerRunnable;
 import fr.umlv.remix.TimerTask;
 
 /**
- * The AITimer class is a timer implementing {@link TimerRunnable}.
+ * The AITimer class is a timer implementing {@see TimerRunnable}.
  * It asks periodically to a {@link Brain} object to play as a player.
  * @author Clément LEBRETON, Jordane MARCEL
  *

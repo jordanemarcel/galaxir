@@ -5,7 +5,7 @@ import java.awt.Font;
 import java.awt.FontMetrics;
 import java.awt.Graphics2D;
 import java.awt.geom.Point2D;
-import java.util.ArrayList;
+import java.util.LinkedList;
 
 import fr.umlv.ir2.galaxir.core.Player;
 import fr.umlv.ir2.galaxir.items.ship.Squadron;
@@ -26,7 +26,7 @@ public class Planet implements ClickableItem {
 	private ShipType currentShipType;
 	private boolean selected;
 	private int selectedArc = 0;
-	private ArrayList<SquadronUnleasher> squadronList = new ArrayList<SquadronUnleasher>();
+	private LinkedList<SquadronUnleasher> squadronList = new LinkedList<SquadronUnleasher>();
 
 	public Planet(int nbShip, int shipRepop, int width, Point2D location, Player owner) {
 		this.nbShip = nbShip;
@@ -71,8 +71,6 @@ public class Planet implements ClickableItem {
 			}
 		}
 	}
-
-
 
 	public void setOver(Player player) {
 		if(this.getOwner()==player) {
@@ -191,7 +189,6 @@ public class Planet implements ClickableItem {
 			g.setFont(new Font(Font.MONOSPACED, Font.BOLD, 10));
 			FontMetrics fm = g.getFontMetrics ();
 			g.drawString(s, (int)location.getX()-fm.stringWidth(s)/2, (int)location.getY());
-
 			s = "+"+total;
 			if(total>0)
 				g.drawString(s, (int)location.getX()-5, (int)location.getY()+15);
@@ -234,7 +231,7 @@ public class Planet implements ClickableItem {
 	public boolean callReinforcement() {
 		if(squadronList.size()==0)
 			return false;
-		SquadronUnleasher su = squadronList.get(0);
+		SquadronUnleasher su = squadronList.getFirst();
 		this.nbShip += su.getNumberOfShip();
 		su.setNumberOfShip(0);
 		return true;

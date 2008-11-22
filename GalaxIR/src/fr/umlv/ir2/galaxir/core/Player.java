@@ -1,7 +1,8 @@
 package fr.umlv.ir2.galaxir.core;
+
 import java.awt.Color;
-import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.LinkedList;
 
 import fr.umlv.ir2.galaxir.items.ClickableItem;
 import fr.umlv.ir2.galaxir.items.Explosion;
@@ -20,8 +21,8 @@ public class Player{
 	private final String name;
 	private final PlayerType playerType;
 	private AuthoritativeItemManager authoritativeItemManager;
-	private ArrayList<ClickableItem> selectedItem = new ArrayList<ClickableItem>();
-	private ArrayList<Integer> scoreList = new ArrayList<Integer>();
+	private LinkedList<ClickableItem> selectedItem = new LinkedList<ClickableItem>();
+	private LinkedList<Integer> scoreList = new LinkedList<Integer>();
 	private int percentage = 50;
 	private Planet overedPlanet;
 	private boolean screenPlayer = false;
@@ -59,7 +60,7 @@ public class Player{
 		overedPlanet = planet;
 	}
 	
-	public ArrayList<Integer> getScore() {
+	public LinkedList<Integer> getScore() {
 		return scoreList;
 	}
 	

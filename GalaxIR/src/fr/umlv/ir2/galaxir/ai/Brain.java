@@ -1,7 +1,7 @@
 package fr.umlv.ir2.galaxir.ai;
 
-import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.Random;
 
 import fr.umlv.ir2.galaxir.core.AuthoritativeItemManager;
 import fr.umlv.ir2.galaxir.core.Player;
@@ -18,23 +18,15 @@ public class Brain {
 		this.player = player;
 	}
 
-	public int score(double growth, double distance, int attack, int defense) {
-		if(defense>attack)
-			return 0;
-		int attackRatio = getOptimalRatio(attack, defense);
-		int distanceRatio = (int)Math.round(100-(distance+1)*100/1000);
-		int score = attackRatio*distanceRatio*(int)growth;
-		return score;
-	}
-
 	public int getOptimalRatio(int attack, int defense) {
 		return (defense+1)*100/(attack+1);
 	}
-	
-	public int getPlanetShipNumber(Planet planet) {
+
+	public int guessDefense(Planet planet) {
 		if(planet.getOwner()==null)
 			return planet.getNbShip();
-		return -1;
+		Random rand = new Random();
+		return rand.nextInt(100)+10;
 	}
 
 	public void run(TimerTask timerTask) {
@@ -42,34 +34,33 @@ public class Brain {
 			timerTask.cancel();
 			return;
 		}
-		
-		int score = -1;
-		ArrayList<Planet> source = new ArrayList<Planet>();
+
+		Planet source = null;
 		Planet destination = null;
-		int ratio = 50;
+		int minRatio = 100;
+		double minDistance = Double.MAX_VALUE;
 		boolean noMorePlanet = true;
-		
+
 		Iterator<Planet> planetListIterator = this.authoritativeItemManager.planetIterator();
 		while(planetListIterator.hasNext()) {
 			Planet planet = planetListIterator.next();
-			int currentScore = -1;
-			Planet bestPlanet = null;
 			Iterator<Planet> playerPlanetListIterator = this.authoritativeItemManager.planetIterator(this.player);
 			while(playerPlanetListIterator.hasNext()) {
 				noMorePlanet = false;
 				Planet playerPlanet = playerPlanetListIterator.next();
 				if(planet.getOwner()!=this.player) {
-					currentScore += score(planet.getShipRepop(), playerPlanet.getLocation().distance(planet.getLocation()), playerPlanet.getNbShip(), planet.getNbShip());
-					if(bestPlanet==null || bestPlanet.getNbShip()<playerPlanet.getNbShip()) {
-						bestPlanet = playerPlanet;
+					double distance = planet.getLocation().distance(playerPlanet.getLocation());
+					if(distance<minDistance) {
+						int defense = this.guessDefense(planet);
+						int ratio = this.getOptimalRatio(playerPlanet.getNbShip(), defense);
+						if(ratio<minRatio) {
+							minDistance = distance;
+							minRatio = ratio;
+							source = playerPlanet;
+							destination = planet;
+						}
 					}
 				}
-			}
-			if(currentScore>score) {
-				score = currentScore;
-				source.add(bestPlanet);
-				destination = planet;
-				ratio = getOptimalRatio(bestPlanet.getNbShip(), planet.getNbShip());
 			}
 		}
 		if(noMorePlanet) {
@@ -79,10 +70,8 @@ public class Brain {
 				return;
 			}
 		}
-		if(destination!=null && source.size()!=0 && score>0) {
-			for(Planet planetSource: source) {
-				planetSource.moveShipTowards(destination, ratio);
-			}
+		if(destination!=null) {
+			source.moveShipTowards(destination, minRatio);
 		}
 	}
 }
